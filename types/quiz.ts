@@ -107,22 +107,20 @@ export interface QuizSubmission {
   isHighPriority: boolean;
 }
 
-// ─── Step IDs ─────────────────────────────────────────────────────────────────
+// ─── Step IDs (no lead-capture — email collected optionally on results page) ──
 export type QuizStepId =
   | "q1-revenue"
   | "q2-business-type"
   | "q3-pain-point"
   | "q4-branch"
   | "q5-branch"
-  | "q6-tools"
-  | "lead-capture";
+  | "q6-tools";
 
 // ─── Option definition ────────────────────────────────────────────────────────
 export interface QuizOption {
   value: string;
   label: string;
   subtext?: string;
-  emoji?: string;
 }
 
 // ─── Step definition ─────────────────────────────────────────────────────────
@@ -130,6 +128,6 @@ export interface QuizStepDef {
   id: QuizStepId;
   question: string;
   subtext?: string;
-  type: "single" | "multi" | "lead-capture";
+  type: "single" | "multi";
   options?: QuizOption[];
 }

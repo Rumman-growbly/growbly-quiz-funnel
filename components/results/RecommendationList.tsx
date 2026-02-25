@@ -16,16 +16,16 @@ export default function RecommendationList({
         {recommendations.map((rec, i) => (
           <div
             key={i}
-            className="flex gap-4 p-5 rounded-2xl bg-white/5 border border-white/8 hover:border-white/15 transition-colors"
+            className="flex gap-4 p-5 rounded-2xl bg-gray-50 border border-gray-100 hover:border-gray-200 transition-colors"
           >
-            <div className="shrink-0 w-10 h-10 rounded-xl bg-brand-accent/20 border border-brand-accent/30 flex items-center justify-center text-lg">
-              {i === 0 ? "⚙️" : i === 1 ? "🔗" : "📊"}
+            <div className="shrink-0 w-8 h-8 rounded-lg bg-brand-accent flex items-center justify-center text-sm font-bold text-white">
+              {i + 1}
             </div>
             <div>
-              <h3 className="font-semibold text-white text-base mb-1">
+              <h3 className="font-semibold text-gray-900 text-base mb-1">
                 {rec.title}
               </h3>
-              <p className="text-brand-muted text-sm leading-relaxed">
+              <p className="text-gray-500 text-sm leading-relaxed">
                 {rec.description}
               </p>
             </div>

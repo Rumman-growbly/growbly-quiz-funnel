@@ -25,13 +25,11 @@ export default function MultiSelectStep({
   return (
     <div className="w-full">
       <div className="mb-8">
-        <h2 className="text-2xl sm:text-3xl font-bold text-white leading-tight tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight tracking-tight">
           {question}
         </h2>
         {subtext && (
-          <p className="mt-3 text-brand-muted text-sm sm:text-base">
-            {subtext}
-          </p>
+          <p className="mt-3 text-gray-500 text-sm sm:text-base">{subtext}</p>
         )}
       </div>
       <div className="flex flex-col gap-3 mb-8">
@@ -40,7 +38,6 @@ export default function MultiSelectStep({
             key={option.value}
             value={option.value}
             label={option.label}
-            emoji={option.emoji}
             selected={selectedValues.includes(option.value as ToolOption)}
             onClick={(val) => onToggle(val as ToolOption)}
           />
@@ -53,8 +50,8 @@ export default function MultiSelectStep({
           w-full py-4 rounded-xl font-semibold text-base transition-all duration-200
           ${
             hasSelection
-              ? "bg-brand-accent text-white hover:bg-brand-accent/90 active:scale-[0.98]"
-              : "bg-white/10 text-white/30 cursor-not-allowed"
+              ? "bg-brand-accent text-white hover:bg-brand-accent/90 active:scale-[0.98] shadow-lg shadow-brand-accent/20"
+              : "bg-gray-100 text-gray-300 cursor-not-allowed"
           }
         `}
       >

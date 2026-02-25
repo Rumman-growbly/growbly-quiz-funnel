@@ -8,22 +8,20 @@ import ProgressBar from "./ProgressBar";
 import BackButton from "./BackButton";
 import QuizStep from "./QuizStep";
 import MultiSelectStep from "./MultiSelectStep";
-import LeadCaptureStep from "./LeadCaptureStep";
 
 import {
   STATIC_STEPS,
   getBranchStep,
-  calculateProgress,
   getNextStep,
   getPrevStep,
   calculateProfile,
   isHighPriority,
+  TOTAL_STEPS,
 } from "@/lib/quiz-logic";
 
 import type {
   QuizAnswers,
   QuizStepId,
-  LeadData,
   RevenueRange,
   BusinessType,
   PainPoint,
@@ -39,7 +37,6 @@ const STEP_ORDER: QuizStepId[] = [
   "q4-branch",
   "q5-branch",
   "q6-tools",
-  "lead-capture",
 ];
 
 const INITIAL_ANSWERS: QuizAnswers = {
@@ -55,7 +52,7 @@ type Direction = "forward" | "back";
 
 const variants = {
   enter: (direction: Direction) => ({
-    x: direction === "forward" ? 48 : -48,
+    x: direction === "forward" ? 40 : -40,
     opacity: 0,
   }),
   center: {
@@ -64,7 +61,7 @@ const variants = {
     transition: { duration: 0.3, ease: "easeOut" as const },
   },
   exit: (direction: Direction) => ({
-    x: direction === "forward" ? -48 : 48,
+    x: direction === "forward" ? -40 : 40,
     opacity: 0,
     transition: { duration: 0.2, ease: "easeIn" as const },
   }),
@@ -75,17 +72,14 @@ export default function QuizShell() {
   const [currentStep, setCurrentStep] = useState<QuizStepId>("q1-revenue");
   const [answers, setAnswers] = useState<QuizAnswers>(INITIAL_ANSWERS);
   const [direction, setDirection] = useState<Direction>("forward");
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // ── Derived values ────────────────────────────────────────────────────────
   const stepIndex = STEP_ORDER.indexOf(currentStep); // 0-based
-  const progress = calculateProgress(currentStep);
   const canGoBack = stepIndex > 0;
 
   // ── Navigation ────────────────────────────────────────────────────────────
   const goForward = useCallback(() => {
     const next = getNextStep(currentStep);
-    if (next === "done") return;
+    if (next === "done") return; // handled by handleComplete
     setDirection("forward");
     setCurrentStep(next);
   }, [currentStep]);
@@ -99,7 +93,6 @@ export default function QuizShell() {
 
   // ── Single-select handler (auto-advance after 300ms) ──────────────────────
   function handleSingleSelect(stepId: QuizStepId, value: string) {
-    // Update answers
     setAnswers((prev) => {
       switch (stepId) {
         case "q1-revenue":
@@ -107,13 +100,7 @@ export default function QuizShell() {
         case "q2-business-type":
           return { ...prev, businessType: value as BusinessType };
         case "q3-pain-point":
-          // Also clear branch answers when pain changes
-          return {
-            ...prev,
-            painPoint: value as PainPoint,
-            q4: null,
-            q5: null,
-          };
+          return { ...prev, painPoint: value as PainPoint, q4: null, q5: null };
         case "q4-branch":
           return { ...prev, q4: value as Q4Answer };
         case "q5-branch":
@@ -122,8 +109,6 @@ export default function QuizShell() {
           return prev;
       }
     });
-
-    // Advance after a brief delay so the user sees their selection
     setTimeout(goForward, 320);
   }
 
@@ -132,10 +117,8 @@ export default function QuizShell() {
     setAnswers((prev) => {
       const existing = prev.tools;
       if (value === "none") {
-        // Selecting "none" clears everything else
         return { ...prev, tools: existing.includes("none") ? [] : ["none"] };
       }
-      // Selecting any real tool clears "none"
       const withoutNone = existing.filter((t) => t !== "none");
       if (withoutNone.includes(value)) {
         return { ...prev, tools: withoutNone.filter((t) => t !== value) };
@@ -144,34 +127,22 @@ export default function QuizShell() {
     });
   }
 
-  // ── Lead capture + submit ─────────────────────────────────────────────────
-  async function handleLeadSubmit(lead: LeadData) {
+  // ── Quiz complete — save to sessionStorage, navigate to results ───────────
+  function handleComplete() {
     const profile = calculateProfile(answers);
     const highPriority = isHighPriority(answers);
-
-    setIsSubmitting(true);
-
     try {
-      await fetch("/api/submit-quiz", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          answers,
-          lead,
-          profile,
-          isHighPriority: highPriority,
-        }),
-      });
+      sessionStorage.setItem(
+        "quiz_answers",
+        JSON.stringify({ answers, profile, isHighPriority: highPriority })
+      );
     } catch {
-      // Non-blocking — navigate to results regardless of API outcome
+      // storage errors are non-fatal
     }
-
-    router.push(
-      `/results/${profile}?name=${encodeURIComponent(lead.firstName)}`
-    );
+    router.push(`/results/${profile}`);
   }
 
-  // ── Current step definition ───────────────────────────────────────────────
+  // ── Render current step ───────────────────────────────────────────────────
   function renderStep() {
     switch (currentStep) {
       case "q1-revenue":
@@ -186,6 +157,7 @@ export default function QuizShell() {
             : answers.painPoint;
         return (
           <QuizStep
+            stepId={currentStep}
             question={stepDef.question}
             subtext={stepDef.subtext}
             options={stepDef.options!}
@@ -199,6 +171,7 @@ export default function QuizShell() {
         const stepDef = getBranchStep("q4-branch", answers.painPoint);
         return (
           <QuizStep
+            stepId="q4-branch"
             question={stepDef.question}
             subtext={stepDef.subtext}
             options={stepDef.options!}
@@ -212,6 +185,7 @@ export default function QuizShell() {
         const stepDef = getBranchStep("q5-branch", answers.painPoint);
         return (
           <QuizStep
+            stepId="q5-branch"
             question={stepDef.question}
             subtext={stepDef.subtext}
             options={stepDef.options!}
@@ -230,23 +204,15 @@ export default function QuizShell() {
             options={stepDef.options!}
             selectedValues={answers.tools}
             onToggle={handleToolToggle}
-            onContinue={goForward}
+            onContinue={handleComplete}
           />
         );
       }
-
-      case "lead-capture":
-        return (
-          <LeadCaptureStep
-            onSubmit={handleLeadSubmit}
-            isSubmitting={isSubmitting}
-          />
-        );
     }
   }
 
   return (
-    <div className="min-h-screen bg-brand-bg flex flex-col items-center px-4 py-8 sm:py-12">
+    <div className="min-h-screen bg-white flex flex-col items-center px-4 py-8 sm:py-12">
       {/* Header */}
       <div className="w-full max-w-lg mb-8 sm:mb-10">
         <div className="flex items-center justify-between mb-6">
@@ -257,15 +223,14 @@ export default function QuizShell() {
           )}
           <a
             href="/"
-            className="text-brand-muted hover:text-white transition-colors text-sm font-medium"
+            className="text-brand-accent font-semibold text-sm tracking-tight"
           >
             Growbly
           </a>
         </div>
         <ProgressBar
-          progress={progress}
           currentStep={stepIndex + 1}
-          totalSteps={STEP_ORDER.length}
+          totalSteps={TOTAL_STEPS}
         />
       </div>
 
@@ -287,8 +252,8 @@ export default function QuizShell() {
 
       {/* Footer */}
       <div className="mt-10 text-center">
-        <p className="text-xs text-brand-muted">
-          🔒 Your information is private and never shared.
+        <p className="text-xs text-gray-400">
+          Your information is private and never shared.
         </p>
       </div>
     </div>

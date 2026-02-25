@@ -4,7 +4,6 @@ interface OptionCardProps {
   value: string;
   label: string;
   subtext?: string;
-  emoji?: string;
   selected: boolean;
   onClick: (value: string) => void;
 }
@@ -13,7 +12,6 @@ export default function OptionCard({
   value,
   label,
   subtext,
-  emoji,
   selected,
   onClick,
 }: OptionCardProps) {
@@ -21,41 +19,34 @@ export default function OptionCard({
     <button
       onClick={() => onClick(value)}
       className={`
-        w-full text-left px-5 py-4 rounded-xl border transition-all duration-200 group
+        w-full text-left px-5 py-4 rounded-xl border-2 transition-all duration-200 group
         min-h-[56px] flex items-center gap-4
         ${
           selected
-            ? "border-brand-accent bg-brand-accent/15 shadow-[0_0_0_1px_#6455d7]"
-            : "border-white/10 bg-white/5 hover:border-white/25 hover:bg-white/8"
+            ? "border-brand-accent bg-brand-light/25 shadow-[0_0_0_1px_#6455d7]"
+            : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
         }
       `}
       aria-pressed={selected}
     >
-      {emoji && (
-        <span className="text-xl shrink-0 select-none" aria-hidden>
-          {emoji}
-        </span>
-      )}
       <div className="flex-1 min-w-0">
         <p
           className={`font-medium text-sm sm:text-base leading-snug ${
-            selected ? "text-white" : "text-white/90"
+            selected ? "text-brand-accent" : "text-gray-900"
           }`}
         >
           {label}
         </p>
         {subtext && (
-          <p className="text-xs text-brand-muted mt-0.5 leading-snug">
-            {subtext}
-          </p>
+          <p className="text-xs text-gray-500 mt-0.5 leading-snug">{subtext}</p>
         )}
       </div>
-      {/* Checkmark */}
+      {/* Radio circle */}
       <div
         className={`shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
           selected
             ? "border-brand-accent bg-brand-accent"
-            : "border-white/20 group-hover:border-white/40"
+            : "border-gray-300 group-hover:border-gray-400"
         }`}
       >
         {selected && (

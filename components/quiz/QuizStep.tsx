@@ -1,9 +1,11 @@
 "use client";
 
 import OptionCard from "./OptionCard";
-import type { QuizOption } from "@/types/quiz";
+import QuizIllustration from "./QuizIllustration";
+import type { QuizOption, QuizStepId } from "@/types/quiz";
 
 interface QuizStepProps {
+  stepId: QuizStepId;
   question: string;
   subtext?: string;
   options: QuizOption[];
@@ -12,6 +14,7 @@ interface QuizStepProps {
 }
 
 export default function QuizStep({
+  stepId,
   question,
   subtext,
   options,
@@ -20,14 +23,13 @@ export default function QuizStep({
 }: QuizStepProps) {
   return (
     <div className="w-full">
+      <QuizIllustration stepId={stepId} />
       <div className="mb-8">
-        <h2 className="text-2xl sm:text-3xl font-bold text-white leading-tight tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight tracking-tight">
           {question}
         </h2>
         {subtext && (
-          <p className="mt-3 text-brand-muted text-sm sm:text-base">
-            {subtext}
-          </p>
+          <p className="mt-3 text-gray-500 text-sm sm:text-base">{subtext}</p>
         )}
       </div>
       <div className="flex flex-col gap-3">
@@ -37,7 +39,6 @@ export default function QuizStep({
             value={option.value}
             label={option.label}
             subtext={option.subtext}
-            emoji={option.emoji}
             selected={selectedValue === option.value}
             onClick={onSelect}
           />

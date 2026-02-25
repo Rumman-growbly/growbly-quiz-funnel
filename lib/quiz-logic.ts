@@ -18,10 +18,10 @@ export const STATIC_STEPS: Record<
     subtext: "This helps us tailor your results to where you are right now.",
     type: "single",
     options: [
-      { value: "under-10k",  label: "Under $10k",        emoji: "🌱" },
-      { value: "10k-50k",    label: "$10k – $50k",        emoji: "📈" },
-      { value: "50k-100k",   label: "$50k – $100k",       emoji: "🚀" },
-      { value: "100k-plus",  label: "$100k+ per month",   emoji: "⚡" },
+      { value: "under-10k",  label: "Under $10k" },
+      { value: "10k-50k",    label: "$10k – $50k" },
+      { value: "50k-100k",   label: "$50k – $100k" },
+      { value: "100k-plus",  label: "$100k+ per month" },
     ],
   },
   "q2-business-type": {
@@ -30,11 +30,11 @@ export const STATIC_STEPS: Record<
     subtext: "We'll personalize your results to your industry.",
     type: "single",
     options: [
-      { value: "local-service",      label: "Local Service Business",  emoji: "🏪" },
-      { value: "ecommerce",          label: "E-commerce / Retail",     emoji: "🛒" },
-      { value: "agency-consulting",  label: "Agency or Consulting",    emoji: "💼" },
-      { value: "saas-tech",          label: "SaaS / Tech",             emoji: "💻" },
-      { value: "other",              label: "Something else",          emoji: "🔧" },
+      { value: "local-service",      label: "Local Service Business" },
+      { value: "ecommerce",          label: "E-commerce / Retail" },
+      { value: "agency-consulting",  label: "Agency or Consulting" },
+      { value: "saas-tech",          label: "SaaS / Tech" },
+      { value: "other",              label: "Something else" },
     ],
   },
   "q3-pain-point": {
@@ -47,25 +47,21 @@ export const STATIC_STEPS: Record<
         value: "operations",
         label: "My team wastes hours on repetitive manual work",
         subtext: "Data entry, reporting, internal processes",
-        emoji: "⚙️",
       },
       {
         value: "sales",
         label: "I can't scale sales without hiring more people",
         subtext: "Lead gen, follow-up, CRM chaos",
-        emoji: "📊",
       },
       {
         value: "service",
         label: "Customer support and fulfillment is overwhelming us",
         subtext: "Same questions, slow responses, chaotic onboarding",
-        emoji: "🔥",
       },
       {
         value: "delivery",
         label: "Managing delivery and team coordination is breaking down",
         subtext: "Projects, clients, deadlines, quality",
-        emoji: "🏗️",
       },
     ],
   },
@@ -75,19 +71,13 @@ export const STATIC_STEPS: Record<
     subtext: "Select all that apply — we'll factor these into your automation plan.",
     type: "multi",
     options: [
-      { value: "spreadsheets",       label: "Spreadsheets / Google Sheets",  emoji: "📋" },
-      { value: "crm",                label: "CRM (HubSpot, Salesforce…)",    emoji: "🗂️" },
-      { value: "project-management", label: "Project management (Asana…)",   emoji: "✅" },
-      { value: "ecommerce-platform", label: "E-commerce platform (Shopify…)",emoji: "🛍️" },
-      { value: "email-marketing",    label: "Email marketing (Mailchimp…)",  emoji: "📧" },
-      { value: "none",               label: "None of these",                 emoji: "🤷" },
+      { value: "spreadsheets",       label: "Spreadsheets / Google Sheets" },
+      { value: "crm",                label: "CRM (HubSpot, Salesforce…)" },
+      { value: "project-management", label: "Project management (Asana…)" },
+      { value: "ecommerce-platform", label: "E-commerce platform (Shopify…)" },
+      { value: "email-marketing",    label: "Email marketing (Mailchimp…)" },
+      { value: "none",               label: "None of these" },
     ],
-  },
-  "lead-capture": {
-    id: "lead-capture",
-    question: "Your personalized automation blueprint is ready.",
-    subtext: "Where should we send it?",
-    type: "lead-capture",
   },
 };
 
@@ -99,10 +89,10 @@ const BRANCH_Q4: Record<PainPoint, QuizStepDef> = {
     question: "Which of these takes the most manual work each week?",
     type: "single",
     options: [
-      { value: "data-entry-reporting",   label: "Data entry and reporting",          emoji: "📊" },
-      { value: "email-management",        label: "Managing emails and inboxes",       emoji: "📨" },
-      { value: "scheduling-coordination", label: "Scheduling and coordination",       emoji: "📅" },
-      { value: "approvals-workflows",     label: "Internal approvals and workflows",  emoji: "✍️" },
+      { value: "data-entry-reporting",    label: "Data entry and reporting" },
+      { value: "email-management",        label: "Managing emails and inboxes" },
+      { value: "scheduling-coordination", label: "Scheduling and coordination" },
+      { value: "approvals-workflows",     label: "Internal approvals and workflows" },
     ],
   },
   sales: {
@@ -110,10 +100,10 @@ const BRANCH_Q4: Record<PainPoint, QuizStepDef> = {
     question: "Where does your sales process break down most?",
     type: "single",
     options: [
-      { value: "not-enough-leads",     label: "Not enough leads coming in",          emoji: "🔍" },
-      { value: "leads-go-cold",         label: "Leads go cold before follow-up",     emoji: "❄️" },
-      { value: "crm-is-a-mess",         label: "CRM is disorganized or unused",      emoji: "🗃️" },
-      { value: "proposals-take-forever",label: "Proposals and quotes take too long", emoji: "⏳" },
+      { value: "not-enough-leads",      label: "Not enough leads coming in" },
+      { value: "leads-go-cold",         label: "Leads go cold before follow-up" },
+      { value: "crm-is-a-mess",         label: "CRM is disorganized or unused" },
+      { value: "proposals-take-forever",label: "Proposals and quotes take too long" },
     ],
   },
   service: {
@@ -121,10 +111,10 @@ const BRANCH_Q4: Record<PainPoint, QuizStepDef> = {
     question: "What's your biggest customer service challenge?",
     type: "single",
     options: [
-      { value: "same-questions",     label: "Answering the same questions repeatedly", emoji: "🔁" },
-      { value: "slow-response",      label: "Response times are too slow",             emoji: "🐌" },
-      { value: "chaotic-onboarding", label: "New client onboarding is chaotic",        emoji: "🌀" },
-      { value: "tracking-requests",  label: "Tracking client requests is hard",        emoji: "🗺️" },
+      { value: "same-questions",     label: "Answering the same questions repeatedly" },
+      { value: "slow-response",      label: "Response times are too slow" },
+      { value: "chaotic-onboarding", label: "New client onboarding is chaotic" },
+      { value: "tracking-requests",  label: "Tracking client requests is hard" },
     ],
   },
   delivery: {
@@ -132,10 +122,10 @@ const BRANCH_Q4: Record<PainPoint, QuizStepDef> = {
     question: "What slows down your delivery the most?",
     type: "single",
     options: [
-      { value: "team-coordination",   label: "Team coordination and communication",   emoji: "👥" },
-      { value: "project-tracking",    label: "Project tracking and status updates",   emoji: "📌" },
-      { value: "client-communication",label: "Client communication and approvals",    emoji: "💬" },
-      { value: "quality-control",     label: "Maintaining quality as you scale",      emoji: "🎯" },
+      { value: "team-coordination",    label: "Team coordination and communication" },
+      { value: "project-tracking",     label: "Project tracking and status updates" },
+      { value: "client-communication", label: "Client communication and approvals" },
+      { value: "quality-control",      label: "Maintaining quality as you scale" },
     ],
   },
 };
@@ -146,10 +136,10 @@ const BRANCH_Q5: Record<PainPoint, QuizStepDef> = {
     question: "How many hours per week does your team spend on this?",
     type: "single",
     options: [
-      { value: "under-5hrs",   label: "Less than 5 hours",  emoji: "🟢" },
-      { value: "5-15hrs",      label: "5 – 15 hours",       emoji: "🟡" },
-      { value: "15-30hrs",     label: "15 – 30 hours",      emoji: "🟠" },
-      { value: "30-plus-hrs",  label: "30+ hours",          emoji: "🔴" },
+      { value: "under-5hrs",  label: "Less than 5 hours" },
+      { value: "5-15hrs",     label: "5 – 15 hours" },
+      { value: "15-30hrs",    label: "15 – 30 hours" },
+      { value: "30-plus-hrs", label: "30+ hours" },
     ],
   },
   sales: {
@@ -157,10 +147,10 @@ const BRANCH_Q5: Record<PainPoint, QuizStepDef> = {
     question: "What's your current CRM situation?",
     type: "single",
     options: [
-      { value: "using-crm",      label: "We have one and actively use it",         emoji: "✅" },
-      { value: "have-not-use",   label: "We have one but barely use it",           emoji: "😬" },
-      { value: "spreadsheets-crm",label: "We track leads in spreadsheets",        emoji: "📋" },
-      { value: "nothing-crm",    label: "No system at all",                        emoji: "🤷" },
+      { value: "using-crm",       label: "We have one and actively use it" },
+      { value: "have-not-use",    label: "We have one but barely use it" },
+      { value: "spreadsheets-crm",label: "We track leads in spreadsheets" },
+      { value: "nothing-crm",     label: "No system at all" },
     ],
   },
   service: {
@@ -168,10 +158,10 @@ const BRANCH_Q5: Record<PainPoint, QuizStepDef> = {
     question: "How quickly do you typically respond to customer inquiries?",
     type: "single",
     options: [
-      { value: "under-1hr", label: "Under 1 hour",          emoji: "⚡" },
-      { value: "same-day",  label: "Same day",               emoji: "📅" },
-      { value: "next-day",  label: "Next day",               emoji: "🌅" },
-      { value: "longer",    label: "Longer than a day",      emoji: "⏰" },
+      { value: "under-1hr", label: "Under 1 hour" },
+      { value: "same-day",  label: "Same day" },
+      { value: "next-day",  label: "Next day" },
+      { value: "longer",    label: "Longer than a day" },
     ],
   },
   delivery: {
@@ -179,10 +169,10 @@ const BRANCH_Q5: Record<PainPoint, QuizStepDef> = {
     question: "How large is your team?",
     type: "single",
     options: [
-      { value: "solo",    label: "Just me",          emoji: "🙋" },
-      { value: "2-5",     label: "2 – 5 people",    emoji: "👥" },
-      { value: "6-15",    label: "6 – 15 people",   emoji: "🏢" },
-      { value: "15-plus", label: "15+ people",      emoji: "🏭" },
+      { value: "solo",    label: "Just me" },
+      { value: "2-5",     label: "2 – 5 people" },
+      { value: "6-15",    label: "6 – 15 people" },
+      { value: "15-plus", label: "15+ people" },
     ],
   },
 };
@@ -198,7 +188,7 @@ export function getBranchStep(
   return stepId === "q4-branch" ? BRANCH_Q4[pain] : BRANCH_Q5[pain];
 }
 
-/** Fixed step order — progress bar is always out of 7 */
+/** Fixed step order — progress indicator is always out of 6 */
 const STEP_ORDER: QuizStepId[] = [
   "q1-revenue",
   "q2-business-type",
@@ -206,17 +196,15 @@ const STEP_ORDER: QuizStepId[] = [
   "q4-branch",
   "q5-branch",
   "q6-tools",
-  "lead-capture",
 ];
 
-/** Returns 0–100 for the progress bar */
+/** Returns 0–100 for a linear progress bar if needed */
 export function calculateProgress(currentStep: QuizStepId): number {
   const index = STEP_ORDER.indexOf(currentStep);
-  // Never show 100% — lead capture is the gate before results
   return Math.round((index / STEP_ORDER.length) * 100);
 }
 
-/** Returns the next step ID, or 'done' after lead-capture */
+/** Returns the next step ID, or 'done' after q6-tools */
 export function getNextStep(currentStep: QuizStepId): QuizStepId | "done" {
   const index = STEP_ORDER.indexOf(currentStep);
   if (index === -1 || index >= STEP_ORDER.length - 1) return "done";
@@ -229,6 +217,9 @@ export function getPrevStep(currentStep: QuizStepId): QuizStepId | null {
   if (index <= 0) return null;
   return STEP_ORDER[index - 1];
 }
+
+/** Returns the total number of steps */
+export const TOTAL_STEPS = STEP_ORDER.length;
 
 /** Calculates the profile from collected answers */
 export function calculateProfile(answers: QuizAnswers): ProfileSlug {

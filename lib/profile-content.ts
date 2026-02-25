@@ -19,7 +19,7 @@ export interface ProfileContent {
   tagline: string;
   badgeColor: string;       // Tailwind bg class
   badgeBorder: string;      // Tailwind border class
-  diagnosisTemplate: string; // {{firstName}} will be interpolated
+  diagnosisTemplate: string;
   recommendations: Recommendation[];
   socialProof: SocialProof;
   ctaPrimary: string;
@@ -32,10 +32,10 @@ export const profiles: Record<ProfileSlug, ProfileContent> = {
     slug: "scaling-operator",
     name: "The Scaling Operator",
     tagline: "Your biggest asset is being wasted on manual work",
-    badgeColor: "bg-blue-600/20",
-    badgeBorder: "border-blue-500/40",
+    badgeColor: "bg-blue-50",
+    badgeBorder: "border-blue-200",
     diagnosisTemplate:
-      "{{firstName}}, your team is spending real hours every week on work that should be running automatically in the background. You're not short on hustle — you're short on leverage. The manual processes eating your time aren't just inefficient, they're actively capping how fast you can grow.",
+      "Your team is spending real hours every week on work that should be running automatically in the background. You're not short on hustle — you're short on leverage. The manual processes eating your time aren't just inefficient, they're actively capping how fast you can grow.",
     recommendations: [
       {
         title: "Automated Reporting Dashboards",
@@ -72,10 +72,10 @@ export const profiles: Record<ProfileSlug, ProfileContent> = {
     slug: "revenue-ceiling",
     name: "The Revenue Ceiling",
     tagline: "You've hit the limit of what manual sales can do",
-    badgeColor: "bg-green-600/20",
-    badgeBorder: "border-green-500/40",
+    badgeColor: "bg-green-50",
+    badgeBorder: "border-green-200",
     diagnosisTemplate:
-      "{{firstName}}, your sales team is the bottleneck — not because they're underperforming, but because you're asking humans to do what systems should handle. Lead follow-up, CRM hygiene, pipeline updates — these are automation problems, not hiring problems. Every lead that goes cold is revenue that should have been yours.",
+      "Your sales team is the bottleneck — not because they're underperforming, but because you're asking humans to do what systems should handle. Lead follow-up, CRM hygiene, pipeline updates — these are automation problems, not hiring problems. Every lead that goes cold is revenue that should have been yours.",
     recommendations: [
       {
         title: "AI-Powered Outreach Sequences",
@@ -112,10 +112,10 @@ export const profiles: Record<ProfileSlug, ProfileContent> = {
     slug: "firefighter",
     name: "The Firefighter",
     tagline: "Reactive support is killing your capacity to grow",
-    badgeColor: "bg-orange-600/20",
-    badgeBorder: "border-orange-500/40",
+    badgeColor: "bg-orange-50",
+    badgeBorder: "border-orange-200",
     diagnosisTemplate:
-      "{{firstName}}, you're scaling revenue but your service delivery is absorbing all the gains. Every new client means more tickets, more questions, more coordination — and it's eating your team alive. The fix isn't more support staff. Every hour your team spends on reactive customer work is an hour not spent on growth.",
+      "You're scaling revenue but your service delivery is absorbing all the gains. Every new client means more tickets, more questions, more coordination — and it's eating your team alive. The fix isn't more support staff. Every hour your team spends on reactive customer work is an hour not spent on growth.",
     recommendations: [
       {
         title: "AI Customer Support Layer",
@@ -152,10 +152,10 @@ export const profiles: Record<ProfileSlug, ProfileContent> = {
     slug: "bottleneck-builder",
     name: "The Bottleneck Builder",
     tagline: "Delivery is breaking under the weight of growth",
-    badgeColor: "bg-purple-600/20",
-    badgeBorder: "border-purple-500/40",
+    badgeColor: "bg-purple-50",
+    badgeBorder: "border-purple-200",
     diagnosisTemplate:
-      "{{firstName}}, you're winning the clients but the delivery side is straining. Team coordination happens in too many places, client communication is inconsistent, and tracking what's actually done requires too much manual effort. You're not failing at delivery — you're outgrowing your infrastructure.",
+      "You're winning the clients but the delivery side is straining. Team coordination happens in too many places, client communication is inconsistent, and tracking what's actually done requires too much manual effort. You're not failing at delivery — you're outgrowing your infrastructure.",
     recommendations: [
       {
         title: "Project Coordination Automation",
@@ -192,10 +192,10 @@ export const profiles: Record<ProfileSlug, ProfileContent> = {
     slug: "not-yet",
     name: "Almost Ready",
     tagline: "You're building the right foundations",
-    badgeColor: "bg-slate-600/20",
-    badgeBorder: "border-slate-500/40",
+    badgeColor: "bg-gray-100",
+    badgeBorder: "border-gray-200",
     diagnosisTemplate:
-      "{{firstName}}, based on where your business is right now, a full custom automation system would be getting ahead of the curve — and that's actually a good sign. It means you're thinking about scale before most people do. Right now, the highest ROI move is building consistent, repeatable processes so that when you're ready to automate, everything multiplies.",
+      "Based on where your business is right now, a full custom automation system would be getting ahead of the curve — and that's actually a good sign. It means you're thinking about scale before most people do. Right now, the highest ROI move is building consistent, repeatable processes so that when you're ready to automate, everything multiplies.",
     recommendations: [
       {
         title: "What to Build Before You Automate",
@@ -228,14 +228,3 @@ export const profiles: Record<ProfileSlug, ProfileContent> = {
     notYet: true,
   },
 };
-
-/** Interpolates {{firstName}} in the diagnosis template */
-export function renderDiagnosis(
-  profile: ProfileSlug,
-  firstName: string
-): string {
-  return profiles[profile].diagnosisTemplate.replace(
-    "{{firstName}}",
-    firstName || "there"
-  );
-}

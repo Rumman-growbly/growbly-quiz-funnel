@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { profiles, renderDiagnosis } from "@/lib/profile-content";
+import { profiles } from "@/lib/profile-content";
 import type { ProfileSlug } from "@/types/quiz";
 
 import ProfileBadge from "@/components/results/ProfileBadge";
@@ -10,7 +10,6 @@ import BookingCTA from "@/components/results/BookingCTA";
 
 interface Props {
   params: { profile: string };
-  searchParams: { name?: string };
 }
 
 const VALID_PROFILES: ProfileSlug[] = [
@@ -34,7 +33,7 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-export default function ResultsPage({ params, searchParams }: Props) {
+export default function ResultsPage({ params }: Props) {
   const profileSlug = params.profile as ProfileSlug;
 
   if (!VALID_PROFILES.includes(profileSlug)) {
@@ -42,50 +41,36 @@ export default function ResultsPage({ params, searchParams }: Props) {
   }
 
   const content = profiles[profileSlug];
-  const firstName = searchParams.name ?? "there";
-  const diagnosis = renderDiagnosis(profileSlug, firstName);
 
   return (
-    <main className="min-h-screen bg-brand-bg">
-      {/* Subtle gradient glow at the top */}
-      <div
-        aria-hidden
-        className="fixed inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 70% 40% at 50% -5%, rgba(100,85,215,0.18) 0%, transparent 60%)",
-        }}
-      />
-
+    <main className="min-h-screen bg-white">
       {/* Nav */}
-      <nav className="relative z-10 flex items-center justify-between px-6 py-5 max-w-2xl mx-auto">
+      <nav className="flex items-center justify-between px-6 py-5 max-w-2xl mx-auto border-b border-gray-100">
         <a
           href="/"
-          className="text-brand-muted hover:text-white transition-colors text-sm font-medium"
+          className="text-brand-accent font-semibold text-sm tracking-tight"
         >
-          ← Growbly
+          Growbly
         </a>
-        <span className="text-xs text-brand-muted bg-white/5 border border-white/10 rounded-full px-3 py-1">
+        <span className="text-xs text-gray-400 bg-gray-50 border border-gray-200 rounded-full px-3 py-1">
           Your Results
         </span>
       </nav>
 
       {/* Content */}
-      <div className="relative z-10 max-w-2xl mx-auto px-5 py-8 sm:py-12">
-        {/* Reveal animation container */}
+      <div className="max-w-2xl mx-auto px-5 py-8 sm:py-12">
         <div className="animate-slide-up">
           <ProfileBadge content={content} />
         </div>
 
         <div className="animate-fade-in" style={{ animationDelay: "0.15s", opacity: 0 }}>
-          <DiagnosisParagraph text={diagnosis} />
+          <DiagnosisParagraph text={content.diagnosisTemplate} />
           <RecommendationList recommendations={content.recommendations} />
           <SocialProofBlock proof={content.socialProof} />
           <BookingCTA
             ctaPrimary={content.ctaPrimary}
             ctaSecondary={content.ctaSecondary}
             notYet={content.notYet}
-            firstName={firstName}
           />
         </div>
       </div>

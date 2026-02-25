@@ -8,7 +8,7 @@ export default function BackButton({ onClick }: BackButtonProps) {
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-1.5 text-brand-muted hover:text-white transition-colors text-sm font-medium group"
+      className="flex items-center gap-1.5 text-gray-400 hover:text-gray-700 transition-colors text-sm font-medium group"
       aria-label="Go back"
     >
       <svg
