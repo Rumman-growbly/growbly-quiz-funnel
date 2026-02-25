@@ -4,11 +4,11 @@ export default function StartQuizCTA() {
   return (
     <section className="px-5 py-20 sm:py-24">
       <div className="max-w-2xl mx-auto text-center">
-        <div className="p-10 sm:p-14 rounded-3xl bg-brand-accent/10 border border-brand-accent/20">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-4">
+        <div className="p-10 sm:p-14 rounded-3xl bg-brand-light/30 border border-brand-light">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight mb-4">
             Ready to find your automation gap?
           </h2>
-          <p className="text-brand-muted text-base sm:text-lg mb-8 max-w-md mx-auto">
+          <p className="text-gray-500 text-base sm:text-lg mb-8 max-w-md mx-auto">
             Takes 2 minutes. No credit card. You&rsquo;ll leave with a clear
             picture of what&rsquo;s holding your growth back — and how to fix it.
           </p>
@@ -19,7 +19,7 @@ export default function StartQuizCTA() {
               bg-brand-accent text-white font-semibold text-base
               px-8 py-4 rounded-xl
               hover:bg-brand-accent/90 active:scale-[0.98]
-              transition-all duration-200 shadow-lg shadow-brand-accent/25
+              transition-all duration-200 shadow-lg shadow-brand-accent/20
             "
           >
             Take the 2-Minute Assessment
@@ -38,7 +38,7 @@ export default function StartQuizCTA() {
               <path d="M12 5l7 7-7 7" />
             </svg>
           </Link>
-          <p className="mt-4 text-xs text-brand-muted">
+          <p className="mt-4 text-xs text-gray-400">
             2 minutes · Free · No pitch
           </p>
         </div>

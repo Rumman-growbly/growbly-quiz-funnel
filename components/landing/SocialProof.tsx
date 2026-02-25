@@ -23,14 +23,12 @@ export default function SocialProof() {
           {stats.map((stat, i) => (
             <div
               key={i}
-              className="text-center p-6 rounded-2xl bg-brand-accent/8 border border-brand-accent/15"
+              className="text-center p-6 rounded-2xl bg-brand-light/20 border border-brand-light"
             >
-              <p className="text-3xl sm:text-4xl font-bold text-white mb-2">
+              <p className="text-3xl sm:text-4xl font-bold text-brand-accent mb-2">
                 {stat.value}
               </p>
-              <p className="text-brand-muted text-sm leading-snug">
-                {stat.label}
-              </p>
+              <p className="text-gray-500 text-sm leading-snug">{stat.label}</p>
             </div>
           ))}
         </div>
@@ -39,8 +37,9 @@ export default function SocialProof() {
         {testimonials.map((t, i) => (
           <div
             key={i}
-            className="p-7 sm:p-8 rounded-2xl bg-white/4 border border-white/8"
+            className="p-7 sm:p-8 rounded-2xl bg-gray-50 border border-gray-100"
           >
+            {/* Stars */}
             <div className="flex mb-4">
               {[...Array(5)].map((_, j) => (
                 <svg
@@ -52,22 +51,22 @@ export default function SocialProof() {
                 </svg>
               ))}
             </div>
-            <blockquote className="text-white/90 text-base sm:text-lg leading-relaxed mb-5 italic">
+            <blockquote className="text-gray-700 text-base sm:text-lg leading-relaxed mb-5 italic">
               &ldquo;{t.quote}&rdquo;
             </blockquote>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-brand-accent/30 flex items-center justify-center text-sm font-bold text-brand-light">
+                <div className="w-9 h-9 rounded-full bg-brand-accent flex items-center justify-center text-sm font-bold text-white">
                   {t.author.charAt(0)}
                 </div>
                 <div>
-                  <p className="text-white text-sm font-medium">{t.author}</p>
-                  <p className="text-brand-muted text-xs">{t.role}</p>
+                  <p className="text-gray-900 text-sm font-medium">{t.author}</p>
+                  <p className="text-gray-500 text-xs">{t.role}</p>
                 </div>
               </div>
-              <div className="hidden sm:block bg-brand-accent/15 border border-brand-accent/25 rounded-full px-3 py-1">
+              <div className="hidden sm:block bg-brand-light/50 border border-brand-light rounded-full px-3 py-1">
                 <span className="text-brand-accent text-xs font-semibold">
-                  ✦ {t.metric}
+                  {t.metric}
                 </span>
               </div>
             </div>
