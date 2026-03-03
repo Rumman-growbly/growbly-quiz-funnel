@@ -2,241 +2,305 @@ import type {
   QuizAnswers,
   QuizStepId,
   QuizStepDef,
-  ProfileSlug,
-  PainPoint,
+  QuestionStepId,
+  TierScores,
+  TierSlug,
 } from "@/types/quiz";
 
-// ─── Static steps (same for all leads) ───────────────────────────────────────
-
-export const STATIC_STEPS: Record<
-  Exclude<QuizStepId, "q4-branch" | "q5-branch">,
-  QuizStepDef
-> = {
-  "q1-revenue": {
-    id: "q1-revenue",
-    question: "How much does your business currently generate per month?",
-    subtext: "This helps us tailor your results to where you are right now.",
-    type: "single",
-    options: [
-      { value: "under-10k",  label: "Under $10k" },
-      { value: "10k-50k",    label: "$10k – $50k" },
-      { value: "50k-100k",   label: "$50k – $100k" },
-      { value: "100k-plus",  label: "$100k+ per month" },
-    ],
-  },
-  "q2-business-type": {
-    id: "q2-business-type",
-    question: "What type of business do you run?",
-    subtext: "We'll personalize your results to your industry.",
-    type: "single",
-    options: [
-      { value: "local-service",      label: "Local Service Business" },
-      { value: "ecommerce",          label: "E-commerce / Retail" },
-      { value: "agency-consulting",  label: "Agency or Consulting" },
-      { value: "saas-tech",          label: "SaaS / Tech" },
-      { value: "other",              label: "Something else" },
-    ],
-  },
-  "q3-pain-point": {
-    id: "q3-pain-point",
-    question: "What's your biggest growth blocker right now?",
-    subtext: "Be honest — this is the key question that shapes your results.",
-    type: "single",
-    options: [
-      {
-        value: "operations",
-        label: "My team wastes hours on repetitive manual work",
-        subtext: "Data entry, reporting, internal processes",
-      },
-      {
-        value: "sales",
-        label: "I can't scale sales without hiring more people",
-        subtext: "Lead gen, follow-up, CRM chaos",
-      },
-      {
-        value: "service",
-        label: "Customer support and fulfillment is overwhelming us",
-        subtext: "Same questions, slow responses, chaotic onboarding",
-      },
-      {
-        value: "delivery",
-        label: "Managing delivery and team coordination is breaking down",
-        subtext: "Projects, clients, deadlines, quality",
-      },
-    ],
-  },
-  "q6-tools": {
-    id: "q6-tools",
-    question: "Which tools does your business currently use?",
-    subtext: "Select all that apply — we'll factor these into your automation plan.",
-    type: "multi",
-    options: [
-      { value: "spreadsheets",       label: "Spreadsheets / Google Sheets" },
-      { value: "crm",                label: "CRM (HubSpot, Salesforce…)" },
-      { value: "project-management", label: "Project management (Asana…)" },
-      { value: "ecommerce-platform", label: "E-commerce platform (Shopify…)" },
-      { value: "email-marketing",    label: "Email marketing (Mailchimp…)" },
-      { value: "none",               label: "None of these" },
-    ],
-  },
-};
-
-// ─── Branch steps (content changes based on pain point) ──────────────────────
-
-const BRANCH_Q4: Record<PainPoint, QuizStepDef> = {
-  operations: {
-    id: "q4-branch",
-    question: "Which of these takes the most manual work each week?",
-    type: "single",
-    options: [
-      { value: "data-entry-reporting",    label: "Data entry and reporting" },
-      { value: "email-management",        label: "Managing emails and inboxes" },
-      { value: "scheduling-coordination", label: "Scheduling and coordination" },
-      { value: "approvals-workflows",     label: "Internal approvals and workflows" },
-    ],
-  },
-  sales: {
-    id: "q4-branch",
-    question: "Where does your sales process break down most?",
-    type: "single",
-    options: [
-      { value: "not-enough-leads",      label: "Not enough leads coming in" },
-      { value: "leads-go-cold",         label: "Leads go cold before follow-up" },
-      { value: "crm-is-a-mess",         label: "CRM is disorganized or unused" },
-      { value: "proposals-take-forever",label: "Proposals and quotes take too long" },
-    ],
-  },
-  service: {
-    id: "q4-branch",
-    question: "What's your biggest customer service challenge?",
-    type: "single",
-    options: [
-      { value: "same-questions",     label: "Answering the same questions repeatedly" },
-      { value: "slow-response",      label: "Response times are too slow" },
-      { value: "chaotic-onboarding", label: "New client onboarding is chaotic" },
-      { value: "tracking-requests",  label: "Tracking client requests is hard" },
-    ],
-  },
-  delivery: {
-    id: "q4-branch",
-    question: "What slows down your delivery the most?",
-    type: "single",
-    options: [
-      { value: "team-coordination",    label: "Team coordination and communication" },
-      { value: "project-tracking",     label: "Project tracking and status updates" },
-      { value: "client-communication", label: "Client communication and approvals" },
-      { value: "quality-control",      label: "Maintaining quality as you scale" },
-    ],
-  },
-};
-
-const BRANCH_Q5: Record<PainPoint, QuizStepDef> = {
-  operations: {
-    id: "q5-branch",
-    question: "How many hours per week does your team spend on this?",
-    type: "single",
-    options: [
-      { value: "under-5hrs",  label: "Less than 5 hours" },
-      { value: "5-15hrs",     label: "5 – 15 hours" },
-      { value: "15-30hrs",    label: "15 – 30 hours" },
-      { value: "30-plus-hrs", label: "30+ hours" },
-    ],
-  },
-  sales: {
-    id: "q5-branch",
-    question: "What's your current CRM situation?",
-    type: "single",
-    options: [
-      { value: "using-crm",       label: "We have one and actively use it" },
-      { value: "have-not-use",    label: "We have one but barely use it" },
-      { value: "spreadsheets-crm",label: "We track leads in spreadsheets" },
-      { value: "nothing-crm",     label: "No system at all" },
-    ],
-  },
-  service: {
-    id: "q5-branch",
-    question: "How quickly do you typically respond to customer inquiries?",
-    type: "single",
-    options: [
-      { value: "under-1hr", label: "Under 1 hour" },
-      { value: "same-day",  label: "Same day" },
-      { value: "next-day",  label: "Next day" },
-      { value: "longer",    label: "Longer than a day" },
-    ],
-  },
-  delivery: {
-    id: "q5-branch",
-    question: "How large is your team?",
-    type: "single",
-    options: [
-      { value: "solo",    label: "Just me" },
-      { value: "2-5",     label: "2 – 5 people" },
-      { value: "6-15",    label: "6 – 15 people" },
-      { value: "15-plus", label: "15+ people" },
-    ],
-  },
-};
-
-// ─── Public API ───────────────────────────────────────────────────────────────
-
-/** Returns the step definition for Q4 or Q5 based on the current pain branch */
-export function getBranchStep(
-  stepId: "q4-branch" | "q5-branch",
-  painPoint: PainPoint | null
-): QuizStepDef {
-  const pain = painPoint ?? "operations";
-  return stepId === "q4-branch" ? BRANCH_Q4[pain] : BRANCH_Q5[pain];
-}
-
-/** Fixed step order — progress indicator is always out of 6 */
-const STEP_ORDER: QuizStepId[] = [
-  "q1-revenue",
-  "q2-business-type",
-  "q3-pain-point",
-  "q4-branch",
-  "q5-branch",
-  "q6-tools",
+// ─── All steps in order ───────────────────────────────────────────────────────
+export const STEP_ORDER: QuizStepId[] = [
+  "q1-role",
+  "q2-revenue",
+  "q3-pain",
+  "interstitial-1",
+  "q4-scale",
+  "q5-attempts",
+  "email-capture",
+  "interstitial-2",
+  "q6-timeline",
+  "q7-ai-familiarity",
+  "q8-investment",
+  "processing",
 ];
 
-/** Returns 0–100 for a linear progress bar if needed */
-export function calculateProgress(currentStep: QuizStepId): number {
-  const index = STEP_ORDER.indexOf(currentStep);
-  return Math.round((index / STEP_ORDER.length) * 100);
+// ─── Question definitions with embedded tier scores ───────────────────────────
+export const QUESTIONS: Record<QuestionStepId, QuizStepDef> = {
+  "q1-role": {
+    id: "q1-role",
+    question: "What's your role in the business?",
+    subtext: "This helps us tailor your recommendation to the right level.",
+    options: [
+      { value: "founder",    label: "Founder / Owner",        scores: { starter: 1, growth: 1, enterprise: 1 } },
+      { value: "director",   label: "Director / Manager",     scores: { starter: 0, growth: 1, enterprise: 1 } },
+      { value: "operations", label: "Operations / COO",       scores: { starter: 1, growth: 1, enterprise: 0 } },
+      { value: "exploring",  label: "Just exploring for now", scores: { starter: 1, growth: 0, enterprise: 0 } },
+    ],
+  },
+
+  "q2-revenue": {
+    id: "q2-revenue",
+    question: "What's your current monthly revenue?",
+    subtext: "We use this to recommend the right scope for your business.",
+    options: [
+      { value: "under-50k",  label: "Under £50k / month",       scores: { starter: 1, growth: 0, enterprise: 0 } },
+      { value: "50k-100k",   label: "£50k – £100k / month",     scores: { starter: 1, growth: 0, enterprise: 0 } },
+      { value: "100k-500k",  label: "£100k – £500k / month",    scores: { starter: 0, growth: 1, enterprise: 0 } },
+      { value: "500k-plus",  label: "£500k+ / month",           scores: { starter: 0, growth: 0, enterprise: 1 } },
+    ],
+  },
+
+  "q3-pain": {
+    id: "q3-pain",
+    question: "What's the biggest thing holding your business back right now?",
+    subtext: "Be honest — this shapes your entire recommendation.",
+    options: [
+      {
+        value: "manual-work",
+        label: "Repetitive manual work & admin",
+        subtext: "Tasks that eat time but don't require real thinking",
+        scores: { starter: 1, growth: 1, enterprise: 0 },
+      },
+      {
+        value: "sales-leads",
+        label: "Sales & lead generation",
+        subtext: "Not enough leads, or leads going cold before close",
+        scores: { starter: 1, growth: 1, enterprise: 0 },
+      },
+      {
+        value: "scale-bottleneck",
+        label: "Can't scale without hiring more people",
+        subtext: "Growth is limited by team capacity, not demand",
+        scores: { starter: 0, growth: 1, enterprise: 1 },
+      },
+      {
+        value: "disconnected-tools",
+        label: "Disconnected tools & data silos",
+        subtext: "Systems don't talk to each other, data lives everywhere",
+        scores: { starter: 0, growth: 1, enterprise: 1 },
+      },
+      {
+        value: "no-visibility",
+        label: "No visibility across the business",
+        subtext: "Hard to know what's actually happening in real time",
+        scores: { starter: 0, growth: 0, enterprise: 1 },
+      },
+    ],
+  },
+
+  "q4-scale": {
+    id: "q4-scale",
+    question: "How many people are in your business?",
+    subtext: "Including full-time, part-time, and contractors.",
+    options: [
+      { value: "just-me",  label: "Just me",       scores: { starter: 1, growth: 0, enterprise: 0 } },
+      { value: "2-5",      label: "2 – 5 people",  scores: { starter: 1, growth: 1, enterprise: 0 } },
+      { value: "6-20",     label: "6 – 20 people", scores: { starter: 0, growth: 1, enterprise: 0 } },
+      { value: "20-plus",  label: "20+ people",    scores: { starter: 0, growth: 0, enterprise: 1 } },
+    ],
+  },
+
+  "q5-attempts": {
+    id: "q5-attempts",
+    question: "Have you tried to automate or systemise anything before?",
+    subtext: "No wrong answer — this tells us where to start.",
+    options: [
+      {
+        value: "nothing-yet",
+        label: "Haven't tried anything yet",
+        scores: { starter: 1, growth: 0, enterprise: 0 },
+      },
+      {
+        value: "tried-tools",
+        label: "Tried some tools — nothing really stuck",
+        scores: { starter: 1, growth: 1, enterprise: 0 },
+      },
+      {
+        value: "hired-someone",
+        label: "Hired someone or a consultant to help",
+        scores: { starter: 0, growth: 1, enterprise: 1 },
+      },
+      {
+        value: "multiple-attempts",
+        label: "Multiple attempts — still struggling",
+        scores: { starter: 0, growth: 0, enterprise: 1 },
+      },
+    ],
+  },
+
+  "q6-timeline": {
+    id: "q6-timeline",
+    question: "What's your timeline for getting this sorted?",
+    subtext: "Be realistic — rushing the wrong solution costs more in the long run.",
+    options: [
+      { value: "exploring",    label: "Just exploring for now",             scores: { starter: 1, growth: 0, enterprise: 0 } },
+      { value: "3-6-months",   label: "Looking to do something in 3–6 months", scores: { starter: 1, growth: 1, enterprise: 0 } },
+      { value: "4-6-weeks",    label: "Want this in place in 4–6 weeks",   scores: { starter: 0, growth: 1, enterprise: 1 } },
+      { value: "right-now",    label: "I need this sorted right now",      scores: { starter: 0, growth: 0, enterprise: 1 } },
+    ],
+  },
+
+  "q7-ai-familiarity": {
+    id: "q7-ai-familiarity",
+    question: "How familiar are you with AI tools?",
+    subtext: "This helps us pitch our recommendation at the right level.",
+    options: [
+      {
+        value: "never-used",
+        label: "Haven't really used any AI tools",
+        scores: { starter: 1, growth: 0, enterprise: 0 },
+      },
+      {
+        value: "experimented",
+        label: "Experimented with ChatGPT or similar",
+        scores: { starter: 1, growth: 1, enterprise: 0 },
+      },
+      {
+        value: "use-regularly",
+        label: "Use a few AI tools regularly",
+        scores: { starter: 0, growth: 1, enterprise: 0 },
+      },
+      {
+        value: "have-systems",
+        label: "Already have AI systems in place",
+        scores: { starter: 0, growth: 0, enterprise: 1 },
+      },
+    ],
+  },
+
+  "q8-investment": {
+    id: "q8-investment",
+    question: "How are you thinking about investment in this?",
+    subtext: "Honest answers lead to better recommendations.",
+    options: [
+      {
+        value: "start-small",
+        label: "Want to start small and test first",
+        scores: { starter: 1, growth: 0, enterprise: 0 },
+      },
+      {
+        value: "ready-if-roi",
+        label: "Ready to invest if the ROI is clear",
+        scores: { starter: 0, growth: 1, enterprise: 0 },
+      },
+      {
+        value: "budget-not-issue",
+        label: "Budget isn't the constraint — results are",
+        scores: { starter: 0, growth: 0, enterprise: 1 },
+      },
+      {
+        value: "not-sure",
+        label: "Not sure yet",
+        scores: { starter: 1, growth: 0, enterprise: 0 },
+      },
+    ],
+  },
+};
+
+// ─── Answer field map ─────────────────────────────────────────────────────────
+export const ANSWER_FIELD: Record<QuestionStepId, keyof QuizAnswers> = {
+  "q1-role":           "role",
+  "q2-revenue":        "revenue",
+  "q3-pain":           "pain",
+  "q4-scale":          "scale",
+  "q5-attempts":       "attempts",
+  "q6-timeline":       "timeline",
+  "q7-ai-familiarity": "aiFamiliarity",
+  "q8-investment":     "investment",
+};
+
+// ─── Navigation ───────────────────────────────────────────────────────────────
+export function getNextStep(current: QuizStepId): QuizStepId | "done" {
+  const i = STEP_ORDER.indexOf(current);
+  if (i === -1 || i >= STEP_ORDER.length - 1) return "done";
+  return STEP_ORDER[i + 1];
 }
 
-/** Returns the next step ID, or 'done' after q6-tools */
-export function getNextStep(currentStep: QuizStepId): QuizStepId | "done" {
-  const index = STEP_ORDER.indexOf(currentStep);
-  if (index === -1 || index >= STEP_ORDER.length - 1) return "done";
-  return STEP_ORDER[index + 1];
+export function getPrevStep(current: QuizStepId): QuizStepId | null {
+  const i = STEP_ORDER.indexOf(current);
+  if (i <= 0) return null;
+  return STEP_ORDER[i - 1];
 }
 
-/** Returns the previous step ID, or null if already at first */
-export function getPrevStep(currentStep: QuizStepId): QuizStepId | null {
-  const index = STEP_ORDER.indexOf(currentStep);
-  if (index <= 0) return null;
-  return STEP_ORDER[index - 1];
+// ─── Progress bar number (1–8 for question steps, frozen at last Q for specials)
+export function getEffectiveQuestionNumber(stepId: QuizStepId): number {
+  const map: Record<QuizStepId, number> = {
+    "q1-role":           1,
+    "q2-revenue":        2,
+    "q3-pain":           3,
+    "interstitial-1":    3,
+    "q4-scale":          4,
+    "q5-attempts":       5,
+    "email-capture":     5,
+    "interstitial-2":    5,
+    "q6-timeline":       6,
+    "q7-ai-familiarity": 7,
+    "q8-investment":     8,
+    "processing":        9, // > 8 = all segments complete
+  };
+  return map[stepId] ?? 1;
 }
 
-/** Returns the total number of steps */
-export const TOTAL_STEPS = STEP_ORDER.length;
+export const TOTAL_QUESTIONS = 8;
 
-/** Calculates the profile from collected answers */
-export function calculateProfile(answers: QuizAnswers): ProfileSlug {
-  if (answers.revenue === "under-10k") return "not-yet";
+// ─── Scoring ──────────────────────────────────────────────────────────────────
+export function calculateScores(answers: QuizAnswers): TierScores {
+  const scores: TierScores = { starter: 0, growth: 0, enterprise: 0 };
 
-  const profileMap: Record<PainPoint, ProfileSlug> = {
-    operations: "scaling-operator",
-    sales:      "revenue-ceiling",
-    service:    "firefighter",
-    delivery:   "bottleneck-builder",
+  const fieldToStep: Array<[keyof QuizAnswers, QuestionStepId]> = [
+    ["role",          "q1-role"],
+    ["revenue",       "q2-revenue"],
+    ["pain",          "q3-pain"],
+    ["scale",         "q4-scale"],
+    ["attempts",      "q5-attempts"],
+    ["timeline",      "q6-timeline"],
+    ["aiFamiliarity", "q7-ai-familiarity"],
+    ["investment",    "q8-investment"],
+  ];
+
+  for (const [field, stepId] of fieldToStep) {
+    const value = answers[field];
+    if (!value) continue;
+    const option = QUESTIONS[stepId].options.find((o) => o.value === value);
+    if (option) {
+      scores.starter    += option.scores.starter;
+      scores.growth     += option.scores.growth;
+      scores.enterprise += option.scores.enterprise;
+    }
+  }
+
+  return scores;
+}
+
+// ─── Tier calculation with tiebreakers ───────────────────────────────────────
+export function calculateTier(scores: TierScores): TierSlug {
+  const { starter, growth, enterprise } = scores;
+  const max = Math.max(starter, growth, enterprise);
+
+  const atMax = {
+    starter:    starter    === max,
+    growth:     growth     === max,
+    enterprise: enterprise === max,
   };
 
-  if (answers.painPoint) return profileMap[answers.painPoint];
-  return "scaling-operator";
+  const tieCount = [atMax.starter, atMax.growth, atMax.enterprise].filter(Boolean).length;
+
+  // Clear winner
+  if (tieCount === 1) {
+    if (atMax.enterprise) return "enterprise";
+    if (atMax.growth)     return "growth";
+    return "starter";
+  }
+
+  // Tiebreakers from spec
+  if (tieCount === 3)                           return "growth";     // 3-way → Growth
+  if (atMax.starter    && atMax.growth)         return "growth";     // S/G → Growth
+  if (atMax.growth     && atMax.enterprise)     return "enterprise"; // G/E → Enterprise
+  if (atMax.starter    && atMax.enterprise)     return "growth";     // S/E → Growth
+
+  return "growth"; // fallback
 }
 
-/** True if the lead is $100k+/mo — used to flag high-priority leads */
-export function isHighPriority(answers: QuizAnswers): boolean {
-  return answers.revenue === "100k-plus";
+// ─── Helper: is this a question step? ────────────────────────────────────────
+export function isQuestionStep(stepId: QuizStepId): stepId is QuestionStepId {
+  return stepId in QUESTIONS;
 }

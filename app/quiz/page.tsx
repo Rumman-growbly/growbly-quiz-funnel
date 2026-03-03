@@ -1,8 +1,8 @@
 import QuizShell from "@/components/quiz/QuizShell";
 
 export const metadata = {
-  title: "AI Readiness Assessment | Growbly",
-  description: "Answer 6 quick questions and get your personalized automation roadmap.",
+  title: "Find out how AI automation can transform your business | Growbly",
+  description: "Answer 8 quick questions and get your personalised AI automation recommendation.",
 };
 
 export default function QuizPage() {

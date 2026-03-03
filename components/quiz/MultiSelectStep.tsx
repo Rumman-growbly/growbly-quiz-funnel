@@ -1,14 +1,14 @@
 "use client";
 
 import OptionCard from "./OptionCard";
-import type { QuizOption, ToolOption } from "@/types/quiz";
+import type { QuizOption } from "@/types/quiz";
 
 interface MultiSelectStepProps {
   question: string;
   subtext?: string;
   options: QuizOption[];
-  selectedValues: ToolOption[];
-  onToggle: (value: ToolOption) => void;
+  selectedValues: string[];
+  onToggle: (value: string) => void;
   onContinue: () => void;
 }
 
@@ -38,8 +38,8 @@ export default function MultiSelectStep({
             key={option.value}
             value={option.value}
             label={option.label}
-            selected={selectedValues.includes(option.value as ToolOption)}
-            onClick={(val) => onToggle(val as ToolOption)}
+            selected={selectedValues.includes(option.value)}
+            onClick={(val) => onToggle(val)}
           />
         ))}
       </div>

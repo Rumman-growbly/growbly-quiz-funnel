@@ -1,4 +1,4 @@
-import type { ProfileSlug } from "@/types/quiz";
+type ProfileSlug = string;
 
 export interface Recommendation {
   title: string;

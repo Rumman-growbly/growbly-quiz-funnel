@@ -1,101 +1,69 @@
-// ─── Revenue ranges ───────────────────────────────────────────────────────────
-export type RevenueRange =
-  | "under-10k"
-  | "10k-50k"
-  | "50k-100k"
-  | "100k-plus";
+// ─── Tier slugs (match /results/[profile] route) ─────────────────────────────
+export type TierSlug = "starter" | "growth" | "enterprise";
 
-// ─── Business types ───────────────────────────────────────────────────────────
-export type BusinessType =
-  | "local-service"
-  | "ecommerce"
-  | "agency-consulting"
-  | "saas-tech"
-  | "other";
-
-// ─── Pain point branches ──────────────────────────────────────────────────────
-export type PainPoint =
-  | "operations"
-  | "sales"
-  | "service"
-  | "delivery";
-
-// ─── Result profile slugs (match /results/[profile] route) ───────────────────
-export type ProfileSlug =
-  | "scaling-operator"
-  | "revenue-ceiling"
-  | "firefighter"
-  | "bottleneck-builder"
-  | "not-yet";
-
-// ─── Q4 answers (union of all branches) ──────────────────────────────────────
-export type Q4Answer =
-  // Operations
-  | "data-entry-reporting"
-  | "email-management"
-  | "scheduling-coordination"
-  | "approvals-workflows"
-  // Sales
-  | "not-enough-leads"
-  | "leads-go-cold"
-  | "crm-is-a-mess"
-  | "proposals-take-forever"
-  // Service
-  | "same-questions"
-  | "slow-response"
-  | "chaotic-onboarding"
-  | "tracking-requests"
-  // Delivery
-  | "team-coordination"
-  | "project-tracking"
-  | "client-communication"
-  | "quality-control";
-
-// ─── Q5 answers (union of all branches) ──────────────────────────────────────
-export type Q5Answer =
-  // Operations
-  | "under-5hrs"
-  | "5-15hrs"
-  | "15-30hrs"
-  | "30-plus-hrs"
-  // Sales
-  | "using-crm"
-  | "have-not-use"
-  | "spreadsheets-crm"
-  | "nothing-crm"
-  // Service
-  | "under-1hr"
-  | "same-day"
-  | "next-day"
-  | "longer"
-  // Delivery
-  | "solo"
-  | "2-5"
-  | "6-15"
-  | "15-plus";
-
-// ─── Tool multi-select ────────────────────────────────────────────────────────
-export type ToolOption =
-  | "spreadsheets"
-  | "crm"
-  | "project-management"
-  | "ecommerce-platform"
-  | "email-marketing"
-  | "none";
-
-// ─── Full answers object accumulated across all steps ─────────────────────────
-export interface QuizAnswers {
-  revenue: RevenueRange | null;
-  businessType: BusinessType | null;
-  painPoint: PainPoint | null;
-  q4: Q4Answer | null;
-  q5: Q5Answer | null;
-  tools: ToolOption[];
+// ─── Tier scores — accumulated points per tier ────────────────────────────────
+export interface TierScores {
+  starter: number;
+  growth: number;
+  enterprise: number;
 }
 
-// ─── Lead capture data ────────────────────────────────────────────────────────
+// ─── All step IDs in the quiz flow ───────────────────────────────────────────
+export type QuizStepId =
+  | "q1-role"
+  | "q2-revenue"
+  | "q3-pain"
+  | "interstitial-1"
+  | "q4-scale"
+  | "q5-attempts"
+  | "email-capture"
+  | "interstitial-2"
+  | "q6-timeline"
+  | "q7-ai-familiarity"
+  | "q8-investment"
+  | "processing";
+
+// ─── Only the question step IDs (used for answer mapping) ────────────────────
+export type QuestionStepId =
+  | "q1-role"
+  | "q2-revenue"
+  | "q3-pain"
+  | "q4-scale"
+  | "q5-attempts"
+  | "q6-timeline"
+  | "q7-ai-familiarity"
+  | "q8-investment";
+
+// ─── Option definition — includes per-tier score deltas ──────────────────────
+export interface QuizOption {
+  value: string;
+  label: string;
+  subtext?: string;
+  scores: TierScores;
+}
+
+// ─── Step definition (question steps only) ───────────────────────────────────
+export interface QuizStepDef {
+  id: QuestionStepId;
+  question: string;
+  subtext?: string;
+  options: QuizOption[];
+}
+
+// ─── Full answers object (one field per question) ─────────────────────────────
+export interface QuizAnswers {
+  role: string | null;
+  revenue: string | null;
+  pain: string | null;
+  scale: string | null;
+  attempts: string | null;
+  timeline: string | null;
+  aiFamiliarity: string | null;
+  investment: string | null;
+}
+
+// ─── Lead data — email captured mid-funnel ───────────────────────────────────
 export interface LeadData {
-  firstName: string;
   email: string;
 }
 
@@ -103,31 +71,6 @@ export interface LeadData {
 export interface QuizSubmission {
   answers: QuizAnswers;
   lead: LeadData;
-  profile: ProfileSlug;
-  isHighPriority: boolean;
-}
-
-// ─── Step IDs (no lead-capture — email collected optionally on results page) ──
-export type QuizStepId =
-  | "q1-revenue"
-  | "q2-business-type"
-  | "q3-pain-point"
-  | "q4-branch"
-  | "q5-branch"
-  | "q6-tools";
-
-// ─── Option definition ────────────────────────────────────────────────────────
-export interface QuizOption {
-  value: string;
-  label: string;
-  subtext?: string;
-}
-
-// ─── Step definition ─────────────────────────────────────────────────────────
-export interface QuizStepDef {
-  id: QuizStepId;
-  question: string;
-  subtext?: string;
-  type: "single" | "multi";
-  options?: QuizOption[];
+  scores: TierScores;
+  recommendedTier: TierSlug;
 }

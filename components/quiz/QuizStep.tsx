@@ -2,10 +2,10 @@
 
 import OptionCard from "./OptionCard";
 import QuizIllustration from "./QuizIllustration";
-import type { QuizOption, QuizStepId } from "@/types/quiz";
+import type { QuizOption, QuestionStepId } from "@/types/quiz";
 
 interface QuizStepProps {
-  stepId: QuizStepId;
+  stepId: QuestionStepId;
   question: string;
   subtext?: string;
   options: QuizOption[];

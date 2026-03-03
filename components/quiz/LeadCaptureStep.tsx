@@ -35,7 +35,7 @@ export default function LeadCaptureStep({
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validate()) return;
-    onSubmit({ firstName: firstName.trim(), email: email.trim() });
+    onSubmit({ email: email.trim() });
   }
 
   return (

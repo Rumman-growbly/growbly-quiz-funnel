@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import { profiles } from "@/lib/profile-content";
-import type { ProfileSlug } from "@/types/quiz";
+import { tiers } from "@/lib/tier-content";
+import type { TierSlug } from "@/types/quiz";
 
 import ProfileBadge from "@/components/results/ProfileBadge";
 import DiagnosisParagraph from "@/components/results/DiagnosisParagraph";
@@ -12,40 +12,34 @@ interface Props {
   params: { profile: string };
 }
 
-const VALID_PROFILES: ProfileSlug[] = [
-  "scaling-operator",
-  "revenue-ceiling",
-  "firefighter",
-  "bottleneck-builder",
-  "not-yet",
-];
+const VALID_TIERS: TierSlug[] = ["starter", "growth", "enterprise"];
 
 export function generateStaticParams() {
-  return VALID_PROFILES.map((profile) => ({ profile }));
+  return VALID_TIERS.map((profile) => ({ profile }));
 }
 
 export async function generateMetadata({ params }: Props) {
-  const content = profiles[params.profile as ProfileSlug];
+  const content = tiers[params.profile as TierSlug];
   if (!content) return {};
   return {
-    title: `${content.name} | Growbly`,
-    description: content.tagline,
+    title: `${content.tag} | Growbly`,
+    description: content.subheadline,
   };
 }
 
 export default function ResultsPage({ params }: Props) {
-  const profileSlug = params.profile as ProfileSlug;
+  const slug = params.profile as TierSlug;
 
-  if (!VALID_PROFILES.includes(profileSlug)) {
+  if (!VALID_TIERS.includes(slug)) {
     redirect("/");
   }
 
-  const content = profiles[profileSlug];
+  const content = tiers[slug];
 
   return (
     <main className="min-h-screen bg-white">
       {/* Nav */}
-      <nav className="flex items-center justify-between px-6 py-5 max-w-2xl mx-auto border-b border-gray-100">
+      <nav className="flex items-center justify-between px-6 py-4 max-w-2xl mx-auto border-b border-gray-100">
         <a
           href="/"
           className="text-brand-accent font-semibold text-sm tracking-tight"
@@ -57,21 +51,30 @@ export default function ResultsPage({ params }: Props) {
         </span>
       </nav>
 
-      {/* Content */}
-      <div className="max-w-2xl mx-auto px-5 py-8 sm:py-12">
-        <div className="animate-slide-up">
+      <div className="max-w-2xl mx-auto px-5">
+        {/* Above-fold: badge + headline + primary CTA */}
+        <div className="pt-8 pb-4 animate-slide-up">
           <ProfileBadge content={content} />
+          <BookingCTA
+            ctaHeadline={content.ctaHeadline}
+            ctaSubheadline={content.ctaSubheadline}
+            ctaButton={content.ctaButton}
+            ctaSmallPrint={content.ctaSmallPrint}
+            accentHex={content.accentHex}
+          />
         </div>
 
-        <div className="animate-fade-in" style={{ animationDelay: "0.15s", opacity: 0 }}>
-          <DiagnosisParagraph text={content.diagnosisTemplate} />
-          <RecommendationList recommendations={content.recommendations} />
-          <SocialProofBlock proof={content.socialProof} />
-          <BookingCTA
-            ctaPrimary={content.ctaPrimary}
-            ctaSecondary={content.ctaSecondary}
-            notYet={content.notYet}
-          />
+        {/* Divider */}
+        <div className="h-px bg-gray-100" />
+
+        {/* Detail: diagnosis + includes + testimonial */}
+        <div
+          className="py-10 animate-fade-in"
+          style={{ animationDelay: "0.2s", opacity: 0 }}
+        >
+          <DiagnosisParagraph text={content.body} accentHex={content.accentHex} />
+          <RecommendationList includes={content.includes} accentHex={content.accentHex} />
+          <SocialProofBlock testimonial={content.testimonial} />
         </div>
       </div>
     </main>

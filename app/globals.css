@@ -11,21 +11,21 @@
 }
 
 body {
-  background-color: #1e1a31;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #111827;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Scrollbar styling */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #1e1a31;
+  background: #f9fafb;
 }
 ::-webkit-scrollbar-thumb {
-  background: #6455d7;
+  background: #d1d5db;
   border-radius: 3px;
 }
 

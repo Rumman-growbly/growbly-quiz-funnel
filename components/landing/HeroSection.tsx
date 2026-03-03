@@ -24,15 +24,12 @@ export default function HeroSection() {
 
         {/* Headline */}
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight tracking-tight mb-6 text-balance">
-          Find out exactly where your business is leaving time and money on the
-          table.
+          Find out how AI automation can transform your business.
         </h1>
 
         {/* Subheadline */}
         <p className="text-lg sm:text-xl text-gray-500 leading-relaxed mb-10 max-w-lg mx-auto">
-          Answer 6 questions. Get a personalized automation roadmap built for
-          businesses doing $50k–$100k+/month who want to scale without adding
-          headcount.
+          Answer 8 questions. Get a personalised AI automation recommendation — including the exact package built for your stage of business.
         </p>
 
         {/* CTA */}

@@ -7,45 +7,34 @@ import { AnimatePresence, motion } from "framer-motion";
 import ProgressBar from "./ProgressBar";
 import BackButton from "./BackButton";
 import QuizStep from "./QuizStep";
-import MultiSelectStep from "./MultiSelectStep";
+import InterstitialScreen from "./InterstitialScreen";
+import EmailCaptureScreen from "./EmailCaptureScreen";
+import ProcessingScreen from "./ProcessingScreen";
 
 import {
-  STATIC_STEPS,
-  getBranchStep,
+  QUESTIONS,
+  ANSWER_FIELD,
+  STEP_ORDER,
   getNextStep,
   getPrevStep,
-  calculateProfile,
-  isHighPriority,
-  TOTAL_STEPS,
+  getEffectiveQuestionNumber,
+  calculateScores,
+  calculateTier,
+  isQuestionStep,
+  TOTAL_QUESTIONS,
 } from "@/lib/quiz-logic";
 
-import type {
-  QuizAnswers,
-  QuizStepId,
-  RevenueRange,
-  BusinessType,
-  PainPoint,
-  Q4Answer,
-  Q5Answer,
-  ToolOption,
-} from "@/types/quiz";
-
-const STEP_ORDER: QuizStepId[] = [
-  "q1-revenue",
-  "q2-business-type",
-  "q3-pain-point",
-  "q4-branch",
-  "q5-branch",
-  "q6-tools",
-];
+import type { QuizAnswers, QuizStepId } from "@/types/quiz";
 
 const INITIAL_ANSWERS: QuizAnswers = {
-  revenue: null,
-  businessType: null,
-  painPoint: null,
-  q4: null,
-  q5: null,
-  tools: [],
+  role:          null,
+  revenue:       null,
+  pain:          null,
+  scale:         null,
+  attempts:      null,
+  timeline:      null,
+  aiFamiliarity: null,
+  investment:    null,
 };
 
 type Direction = "forward" | "back";
@@ -69,17 +58,21 @@ const variants = {
 
 export default function QuizShell() {
   const router = useRouter();
-  const [currentStep, setCurrentStep] = useState<QuizStepId>("q1-revenue");
+  const [currentStep, setCurrentStep] = useState<QuizStepId>("q1-role");
   const [answers, setAnswers] = useState<QuizAnswers>(INITIAL_ANSWERS);
+  const [email, setEmail] = useState("");
   const [direction, setDirection] = useState<Direction>("forward");
 
-  const stepIndex = STEP_ORDER.indexOf(currentStep); // 0-based
-  const canGoBack = stepIndex > 0;
+  const stepIndex = STEP_ORDER.indexOf(currentStep);
+  const canGoBack = stepIndex > 0 && currentStep !== "processing";
+  const isProcessing = currentStep === "processing";
+  const isInterstitial = currentStep === "interstitial-1" || currentStep === "interstitial-2";
+  const bgCream = isInterstitial;
 
   // ── Navigation ────────────────────────────────────────────────────────────
-  const goForward = useCallback(() => {
+  const advance = useCallback(() => {
     const next = getNextStep(currentStep);
-    if (next === "done") return; // handled by handleComplete
+    if (next === "done") return;
     setDirection("forward");
     setCurrentStep(next);
   }, [currentStep]);
@@ -91,151 +84,119 @@ export default function QuizShell() {
     setCurrentStep(prev);
   }, [currentStep]);
 
-  // ── Single-select handler (auto-advance after 300ms) ──────────────────────
+  // ── Single-select handler (auto-advance 320ms) ────────────────────────────
   function handleSingleSelect(stepId: QuizStepId, value: string) {
-    setAnswers((prev) => {
-      switch (stepId) {
-        case "q1-revenue":
-          return { ...prev, revenue: value as RevenueRange };
-        case "q2-business-type":
-          return { ...prev, businessType: value as BusinessType };
-        case "q3-pain-point":
-          return { ...prev, painPoint: value as PainPoint, q4: null, q5: null };
-        case "q4-branch":
-          return { ...prev, q4: value as Q4Answer };
-        case "q5-branch":
-          return { ...prev, q5: value as Q5Answer };
-        default:
-          return prev;
-      }
-    });
-    setTimeout(goForward, 320);
+    if (!isQuestionStep(stepId)) return;
+    const field = ANSWER_FIELD[stepId];
+    setAnswers((prev) => ({ ...prev, [field]: value }));
+    setTimeout(advance, 320);
   }
 
-  // ── Multi-select handler ──────────────────────────────────────────────────
-  function handleToolToggle(value: ToolOption) {
-    setAnswers((prev) => {
-      const existing = prev.tools;
-      if (value === "none") {
-        return { ...prev, tools: existing.includes("none") ? [] : ["none"] };
-      }
-      const withoutNone = existing.filter((t) => t !== "none");
-      if (withoutNone.includes(value)) {
-        return { ...prev, tools: withoutNone.filter((t) => t !== value) };
-      }
-      return { ...prev, tools: [...withoutNone, value] };
-    });
+  // ── Email capture submit ──────────────────────────────────────────────────
+  function handleEmailSubmit(capturedEmail: string) {
+    setEmail(capturedEmail);
+    advance();
   }
 
-  // ── Quiz complete — save to sessionStorage, navigate to results ───────────
-  function handleComplete() {
-    const profile = calculateProfile(answers);
-    const highPriority = isHighPriority(answers);
-    try {
-      sessionStorage.setItem(
-        "quiz_answers",
-        JSON.stringify({ answers, profile, isHighPriority: highPriority })
-      );
-    } catch {
-      // storage errors are non-fatal
-    }
-    router.push(`/results/${profile}`);
+  // ── Processing complete — score, submit, navigate ─────────────────────────
+  function handleProcessingComplete() {
+    const scores = calculateScores(answers);
+    const tier = calculateTier(scores);
+
+    // Fire-and-forget — user never waits on this
+    fetch("/api/submit-quiz", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        answers,
+        lead: { email },
+        scores,
+        recommendedTier: tier,
+      }),
+    }).catch(() => {});
+
+    router.push(`/results/${tier}`);
   }
 
   // ── Render current step ───────────────────────────────────────────────────
   function renderStep() {
+    // Question steps
+    if (isQuestionStep(currentStep)) {
+      const stepDef = QUESTIONS[currentStep];
+      const field = ANSWER_FIELD[currentStep];
+      const selectedValue = answers[field];
+
+      return (
+        <QuizStep
+          stepId={currentStep}
+          question={stepDef.question}
+          subtext={stepDef.subtext}
+          options={stepDef.options}
+          selectedValue={selectedValue}
+          onSelect={(val) => handleSingleSelect(currentStep, val)}
+        />
+      );
+    }
+
+    // Special screens
     switch (currentStep) {
-      case "q1-revenue":
-      case "q2-business-type":
-      case "q3-pain-point": {
-        const stepDef = STATIC_STEPS[currentStep];
-        const selectedValue =
-          currentStep === "q1-revenue"
-            ? answers.revenue
-            : currentStep === "q2-business-type"
-            ? answers.businessType
-            : answers.painPoint;
-        return (
-          <QuizStep
-            stepId={currentStep}
-            question={stepDef.question}
-            subtext={stepDef.subtext}
-            options={stepDef.options!}
-            selectedValue={selectedValue}
-            onSelect={(val) => handleSingleSelect(currentStep, val)}
-          />
-        );
-      }
+      case "interstitial-1":
+        return <InterstitialScreen variant={1} onContinue={advance} />;
 
-      case "q4-branch": {
-        const stepDef = getBranchStep("q4-branch", answers.painPoint);
-        return (
-          <QuizStep
-            stepId="q4-branch"
-            question={stepDef.question}
-            subtext={stepDef.subtext}
-            options={stepDef.options!}
-            selectedValue={answers.q4}
-            onSelect={(val) => handleSingleSelect("q4-branch", val)}
-          />
-        );
-      }
+      case "interstitial-2":
+        return <InterstitialScreen variant={2} onContinue={advance} />;
 
-      case "q5-branch": {
-        const stepDef = getBranchStep("q5-branch", answers.painPoint);
+      case "email-capture":
         return (
-          <QuizStep
-            stepId="q5-branch"
-            question={stepDef.question}
-            subtext={stepDef.subtext}
-            options={stepDef.options!}
-            selectedValue={answers.q5}
-            onSelect={(val) => handleSingleSelect("q5-branch", val)}
+          <EmailCaptureScreen
+            initialEmail={email}
+            onSubmit={handleEmailSubmit}
           />
         );
-      }
 
-      case "q6-tools": {
-        const stepDef = STATIC_STEPS["q6-tools"];
-        return (
-          <MultiSelectStep
-            question={stepDef.question}
-            subtext={stepDef.subtext}
-            options={stepDef.options!}
-            selectedValues={answers.tools}
-            onToggle={handleToolToggle}
-            onContinue={handleComplete}
-          />
-        );
-      }
+      case "processing":
+        return <ProcessingScreen onComplete={handleProcessingComplete} />;
+
+      default:
+        return null;
     }
   }
 
+  const qNum = getEffectiveQuestionNumber(currentStep);
+
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center px-4 py-8 sm:py-12">
-      {/* Header */}
-      <div className="w-full max-w-lg mb-8 sm:mb-10">
-        <div className="flex items-center justify-between mb-6">
-          {canGoBack ? (
-            <BackButton onClick={goBack} />
-          ) : (
-            <div /> /* spacer */
-          )}
-          <a
-            href="/"
-            className="text-brand-accent font-semibold text-sm tracking-tight"
-          >
-            Growbly
-          </a>
+    <div
+      className={`
+        min-h-screen flex flex-col items-center px-4 py-8 sm:py-12
+        transition-colors duration-300
+        ${bgCream ? "bg-[#FFF7ED]" : "bg-white"}
+      `}
+    >
+      {/* Header — hidden on processing screen */}
+      {!isProcessing && (
+        <div className="w-full max-w-lg mb-8 sm:mb-10">
+          <div className="flex items-center justify-between mb-6">
+            {canGoBack ? (
+              <BackButton onClick={goBack} />
+            ) : (
+              <div />
+            )}
+            <a
+              href="/"
+              className="text-brand-accent font-semibold text-sm tracking-tight"
+            >
+              Growbly
+            </a>
+          </div>
+          <ProgressBar
+            currentStep={qNum}
+            totalSteps={TOTAL_QUESTIONS}
+          />
         </div>
-        <ProgressBar
-          currentStep={stepIndex + 1}
-          totalSteps={TOTAL_STEPS}
-        />
-      </div>
+      )}
 
       {/* Step content */}
-      <div className="w-full max-w-lg flex-1">
+      <div className={`w-full max-w-lg flex-1 ${isProcessing ? "flex items-center" : ""}`}>
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={currentStep}
@@ -244,18 +205,21 @@ export default function QuizShell() {
             initial="enter"
             animate="center"
             exit="exit"
+            className="w-full"
           >
             {renderStep()}
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* Footer */}
-      <div className="mt-10 text-center">
-        <p className="text-xs text-gray-400">
-          Your information is private and never shared.
-        </p>
-      </div>
+      {/* Footer — hidden on processing screen */}
+      {!isProcessing && (
+        <div className="mt-10 text-center">
+          <p className="text-xs text-gray-400">
+            Your information is private and never shared.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

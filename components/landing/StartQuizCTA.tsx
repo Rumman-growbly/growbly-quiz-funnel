@@ -6,11 +6,10 @@ export default function StartQuizCTA() {
       <div className="max-w-2xl mx-auto text-center">
         <div className="p-10 sm:p-14 rounded-3xl bg-brand-light/30 border border-brand-light">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight mb-4">
-            Ready to find your automation gap?
+            Ready to find out how AI can transform your business?
           </h2>
           <p className="text-gray-500 text-base sm:text-lg mb-8 max-w-md mx-auto">
-            Takes 2 minutes. No credit card. You&rsquo;ll leave with a clear
-            picture of what&rsquo;s holding your growth back — and how to fix it.
+            8 questions. 2 minutes. You&rsquo;ll leave with a personalised AI automation recommendation — and a clear starting point.
           </p>
           <Link
             href="/quiz"
@@ -39,7 +38,7 @@ export default function StartQuizCTA() {
             </svg>
           </Link>
           <p className="mt-4 text-xs text-gray-400">
-            2 minutes · Free · No pitch
+            8 questions · 2 minutes · Free
           </p>
         </div>
       </div>

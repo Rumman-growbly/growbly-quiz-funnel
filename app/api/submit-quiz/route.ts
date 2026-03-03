@@ -11,10 +11,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const { answers, lead, profile, isHighPriority } = body;
+  const { answers, lead, scores, recommendedTier } = body;
 
   // Basic validation
-  if (!lead?.email || !lead?.firstName || !profile) {
+  if (!lead?.email || !recommendedTier) {
     return NextResponse.json(
       { error: "Missing required fields" },
       { status: 400 }
@@ -25,19 +25,25 @@ export async function POST(req: NextRequest) {
   try {
     const supabase = createClient();
     await supabase.from("leads").insert({
-      first_name: lead.firstName,
-      email: lead.email,
-      profile,
-      revenue_range: answers.revenue,
-      business_type: answers.businessType,
-      pain_point: answers.painPoint,
-      quiz_answers: answers,
-      is_high_priority: isHighPriority,
-      calendly_booked: false,
+      email:               lead.email,
+      role:                answers.role,
+      monthly_revenue:     answers.revenue,
+      pain_point:          answers.pain,
+      people_affected:     answers.scale,
+      previous_attempts:   answers.attempts,
+      timeline:            answers.timeline,
+      ai_familiarity:      answers.aiFamiliarity,
+      investment_readiness: answers.investment,
+      starter_score:       scores.starter,
+      growth_score:        scores.growth,
+      enterprise_score:    scores.enterprise,
+      recommended_tier:    recommendedTier,
+      quiz_answers:        answers,
+      submitted_at:        new Date().toISOString(),
     });
   } catch (err) {
     console.error("[submit-quiz] Supabase insert failed:", err);
-    // Continue — don't block the user experience
+    // Continue — don't block user experience
   }
 
   // 2. Fire n8n webhook (fire-and-forget)
@@ -47,18 +53,13 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        firstName: lead.firstName,
-        email: lead.email,
-        profile,
-        revenue_range: answers.revenue,
-        business_type: answers.businessType,
-        pain_point: answers.painPoint,
-        tools: answers.tools,
-        is_high_priority: isHighPriority,
-        quiz_answers: answers,
+        email:            lead.email,
+        recommended_tier: recommendedTier,
+        scores,
+        answers,
       }),
     }).catch((err) => console.error("[submit-quiz] n8n webhook failed:", err));
   }
 
-  return NextResponse.json({ success: true, profile }, { status: 200 });
+  return NextResponse.json({ success: true, tier: recommendedTier }, { status: 200 });
 }
