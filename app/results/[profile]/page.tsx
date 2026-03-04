@@ -4,8 +4,9 @@ import type { TierSlug } from "@/types/quiz";
 
 import ProfileBadge from "@/components/results/ProfileBadge";
 import DiagnosisParagraph from "@/components/results/DiagnosisParagraph";
+import BulletSection from "@/components/results/BulletSection";
 import RecommendationList from "@/components/results/RecommendationList";
-import SocialProofBlock from "@/components/results/SocialProofBlock";
+import OutcomeBlock from "@/components/results/OutcomeBlock";
 import BookingCTA from "@/components/results/BookingCTA";
 
 interface Props {
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: Props) {
   const content = tiers[params.profile as TierSlug];
   if (!content) return {};
   return {
-    title: `${content.tag} | Growbly`,
+    title: `${content.tag.split(" — ")[0]} | Growbly`,
     description: content.subheadline,
   };
 }
@@ -51,31 +52,35 @@ export default function ResultsPage({ params }: Props) {
         </span>
       </nav>
 
-      <div className="max-w-2xl mx-auto px-5">
-        {/* Above-fold: badge + headline + primary CTA */}
-        <div className="pt-8 pb-4 animate-slide-up">
-          <ProfileBadge content={content} />
-          <BookingCTA
-            ctaHeadline={content.ctaHeadline}
-            ctaSubheadline={content.ctaSubheadline}
-            ctaButton={content.ctaButton}
-            ctaSmallPrint={content.ctaSmallPrint}
-            accentHex={content.accentHex}
-          />
-        </div>
+      <div className="max-w-2xl mx-auto px-5 py-10 animate-slide-up">
 
-        {/* Divider */}
-        <div className="h-px bg-gray-100" />
+        {/* 1. Tag + Headline + Subheadline */}
+        <ProfileBadge content={content} />
 
-        {/* Detail: diagnosis + includes + testimonial */}
-        <div
-          className="py-10 animate-fade-in"
-          style={{ animationDelay: "0.2s", opacity: 0 }}
-        >
-          <DiagnosisParagraph text={content.body} accentHex={content.accentHex} />
-          <RecommendationList includes={content.includes} accentHex={content.accentHex} />
-          <SocialProofBlock testimonial={content.testimonial} />
-        </div>
+        {/* 2. Body */}
+        <DiagnosisParagraph text={content.body} accentHex={content.accentHex} />
+
+        {/* 3. Outcomes */}
+        <BulletSection label="Outcomes" items={content.outcomes} />
+
+        {/* 4. What's Included */}
+        <RecommendationList includes={content.includes} accentHex={content.accentHex} />
+
+        {/* 5. What This Means For You */}
+        <BulletSection label="What This Means For You" items={content.whatThisMeansForYou} />
+
+        {/* 6. Outcome block (pull-quote) */}
+        <OutcomeBlock text={content.outcomeBlock} accentHex={content.accentHex} />
+
+        {/* 7. CTA */}
+        <BookingCTA
+          ctaHeadline={content.ctaHeadline}
+          ctaSubheadline={content.ctaSubheadline}
+          ctaButton={content.ctaButton}
+          ctaSmallPrint={content.ctaSmallPrint}
+          accentHex={content.accentHex}
+        />
+
       </div>
     </main>
   );
