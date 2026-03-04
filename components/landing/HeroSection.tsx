@@ -24,7 +24,7 @@ export default function HeroSection() {
 
         {/* Headline */}
         <div className="mb-6">
-          <h1 className="text-3xl sm:text-4xl lg:text-[34px] font-bold text-gray-900 leading-tight tracking-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-[38px] font-bold text-gray-900 leading-tight tracking-tight">
             Something in your operation is
             <br className="hidden lg:block" />
             {" "}bleeding{" "}
