@@ -70,8 +70,7 @@ export const tiers: Record<TierSlug, TierContent> = {
     price: "£6,000",
     accentHex: "#5B21B6",
 
-    headline:
-      "The bigger it gets, the more it needs you. You\u2019re not understaffed. You\u2019re under-systematised.",
+    headline: "You have the revenue. The systems just have not caught up.",
 
     subheadline:
       "At your stage, the problem isn\u2019t effort. Your team is working hard. The problem is that too much of that effort is going into work that should be automated.",
