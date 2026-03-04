@@ -16,7 +16,7 @@ declare global {
   }
 }
 
-const CALENDLY_URL = "https://calendly.com/growbly/strategy-call";
+const CALENDLY_URL = "https://calendly.com/rumman-growbly/quick-checkup";
 
 export default function BookingCTA({
   ctaHeadline,
