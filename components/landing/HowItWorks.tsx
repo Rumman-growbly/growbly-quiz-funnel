@@ -1,21 +1,21 @@
 const steps = [
   {
     number: "01",
-    title: "Answer 6 quick questions",
+    title: "Answer 8 quick questions",
     description:
-      "Tell us about your business, your revenue, and where you feel the most friction. Takes under 2 minutes.",
+      "Tell us a bit about where your business is right now. No trick questions. No right or wrong answers. Just an honest picture of where things stand.",
   },
   {
     number: "02",
     title: "We identify your biggest gap",
     description:
-      "Our diagnostic maps your answers to the exact type of automation that will move the needle most for your business.",
+      "Your answers are scored against the patterns we see across hundreds of businesses. We identify exactly which type of automation would move the needle most for you specifically.",
   },
   {
     number: "03",
-    title: "Get your personalized roadmap",
+    title: "Get your clear starting point",
     description:
-      "See your profile, your 3 highest-impact automations, and book a free strategy call to build it.",
+      "A personalised package recommendation, the exact outcomes you can expect, and a free 30-minute call to scope out how we would build it. No fluff, no generic advice.",
   },
 ];
 

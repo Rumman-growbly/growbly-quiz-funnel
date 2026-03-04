@@ -9,7 +9,7 @@ export default function StartQuizCTA() {
             Ready to find out how AI can transform your business?
           </h2>
           <p className="text-gray-500 text-base sm:text-lg mb-8 max-w-md mx-auto">
-            8 questions. 2 minutes. You&rsquo;ll leave with a personalised AI automation recommendation — and a clear starting point.
+            8 questions. 2 minutes. You&rsquo;ll leave with a personalised AI automation recommendation and a clear starting point.
           </p>
           <Link
             href="/quiz"

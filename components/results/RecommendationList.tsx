@@ -5,8 +5,11 @@ interface RecommendationListProps {
 
 export default function RecommendationList({ includes, accentHex }: RecommendationListProps) {
   return (
-    <div className="mb-10">
-      <h2 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: accentHex }}>
+    <div className="mb-12">
+      <h2
+        className="text-xl sm:text-2xl font-bold uppercase tracking-wide mb-5 mt-2"
+        style={{ color: accentHex }}
+      >
         What&rsquo;s Included
       </h2>
       <div

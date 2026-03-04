@@ -52,7 +52,7 @@ export const QUESTIONS: Record<QuestionStepId, QuizStepDef> = {
   "q3-pain": {
     id: "q3-pain",
     question: "What's the biggest thing holding your business back right now?",
-    subtext: "Be honest — this shapes your entire recommendation.",
+    subtext: "Be honest. This shapes your entire recommendation.",
     options: [
       {
         value: "manual-work",
@@ -102,7 +102,7 @@ export const QUESTIONS: Record<QuestionStepId, QuizStepDef> = {
   "q5-attempts": {
     id: "q5-attempts",
     question: "Have you tried to automate or systemise anything before?",
-    subtext: "No wrong answer — this tells us where to start.",
+    subtext: "No wrong answer. This tells us where to start.",
     options: [
       {
         value: "nothing-yet",
@@ -111,7 +111,7 @@ export const QUESTIONS: Record<QuestionStepId, QuizStepDef> = {
       },
       {
         value: "tried-tools",
-        label: "Tried some tools — nothing really stuck",
+        label: "Tried some tools. Nothing really stuck.",
         scores: { starter: 1, growth: 1, enterprise: 0 },
       },
       {
@@ -121,7 +121,7 @@ export const QUESTIONS: Record<QuestionStepId, QuizStepDef> = {
       },
       {
         value: "multiple-attempts",
-        label: "Multiple attempts — still struggling",
+        label: "Multiple attempts, still struggling",
         scores: { starter: 0, growth: 0, enterprise: 1 },
       },
     ],
@@ -130,7 +130,7 @@ export const QUESTIONS: Record<QuestionStepId, QuizStepDef> = {
   "q6-timeline": {
     id: "q6-timeline",
     question: "What's your timeline for getting this sorted?",
-    subtext: "Be realistic — rushing the wrong solution costs more in the long run.",
+    subtext: "Be realistic. Rushing the wrong solution costs more in the long run.",
     options: [
       { value: "exploring",    label: "Just exploring for now",             scores: { starter: 1, growth: 0, enterprise: 0 } },
       { value: "3-6-months",   label: "Looking to do something in 3–6 months", scores: { starter: 1, growth: 1, enterprise: 0 } },
@@ -184,7 +184,7 @@ export const QUESTIONS: Record<QuestionStepId, QuizStepDef> = {
       },
       {
         value: "budget-not-issue",
-        label: "Budget isn't the constraint — results are",
+        label: "Budget isn't the constraint. Results are.",
         scores: { starter: 0, growth: 0, enterprise: 1 },
       },
       {

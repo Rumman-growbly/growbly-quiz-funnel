@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props) {
   const content = tiers[params.profile as TierSlug];
   if (!content) return {};
   return {
-    title: `${content.tag.split(" — ")[0]} | Growbly`,
+    title: `${content.tag.split(" · ")[0]} | Growbly`,
     description: content.subheadline,
   };
 }
@@ -61,13 +61,13 @@ export default function ResultsPage({ params }: Props) {
         <DiagnosisParagraph text={content.body} accentHex={content.accentHex} />
 
         {/* 3. Outcomes */}
-        <BulletSection label="Outcomes" items={content.outcomes} />
+        <BulletSection label="Outcomes" items={content.outcomes} accentHex={content.accentHex} />
 
         {/* 4. What's Included */}
         <RecommendationList includes={content.includes} accentHex={content.accentHex} />
 
         {/* 5. What This Means For You */}
-        <BulletSection label="What This Means For You" items={content.whatThisMeansForYou} />
+        <BulletSection label="What This Means For You" items={content.whatThisMeansForYou} accentHex={content.accentHex} />
 
         {/* 6. Outcome block (pull-quote) */}
         <OutcomeBlock text={content.outcomeBlock} accentHex={content.accentHex} />

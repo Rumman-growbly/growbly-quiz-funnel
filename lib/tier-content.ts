@@ -21,7 +21,7 @@ export interface TierContent {
 export const tiers: Record<TierSlug, TierContent> = {
   starter: {
     slug: "starter",
-    tag: "STARTER PACKAGE — RECOMMENDED FOR YOU",
+    tag: "STARTER PACKAGE · RECOMMENDED FOR YOU",
     price: "£3,000",
     accentHex: "#059669",
 
@@ -66,7 +66,7 @@ export const tiers: Record<TierSlug, TierContent> = {
 
   growth: {
     slug: "growth",
-    tag: "GROWTH PACKAGE — RECOMMENDED FOR YOU",
+    tag: "GROWTH PACKAGE · RECOMMENDED FOR YOU",
     price: "£6,000",
     accentHex: "#5B21B6",
 
@@ -113,7 +113,7 @@ export const tiers: Record<TierSlug, TierContent> = {
 
   enterprise: {
     slug: "enterprise",
-    tag: "ENTERPRISE PACKAGE — RECOMMENDED FOR YOU",
+    tag: "ENTERPRISE PACKAGE · RECOMMENDED FOR YOU",
     price: "£12,000+",
     accentHex: "#1E0A3C",
 

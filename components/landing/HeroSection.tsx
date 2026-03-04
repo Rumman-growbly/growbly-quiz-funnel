@@ -24,12 +24,12 @@ export default function HeroSection() {
 
         {/* Headline */}
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight tracking-tight mb-6 text-balance">
-          Find out how AI automation can transform your business.
+          Something in your operation is bleeding time and money every single week. Most owners never find it.
         </h1>
 
         {/* Subheadline */}
         <p className="text-lg sm:text-xl text-gray-500 leading-relaxed mb-10 max-w-lg mx-auto">
-          Answer 8 questions. Get a personalised AI automation recommendation — including the exact package built for your stage of business.
+          Answer 8 questions. Get a personalised recommendation for exactly what to fix first.
         </p>
 
         {/* CTA */}

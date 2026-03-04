@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import ProgressBar from "./ProgressBar";
 import BackButton from "./BackButton";
 import QuizStep from "./QuizStep";
-import InterstitialScreen from "./InterstitialScreen";
+import InterstitialScreen, { type InterstitialVariant } from "./InterstitialScreen";
 import EmailCaptureScreen from "./EmailCaptureScreen";
 import ProcessingScreen from "./ProcessingScreen";
 
@@ -140,11 +140,17 @@ export default function QuizShell() {
 
     // Special screens
     switch (currentStep) {
-      case "interstitial-1":
-        return <InterstitialScreen variant={1} onContinue={advance} />;
+      case "interstitial-1": {
+        const revenueVariant = ((): InterstitialVariant => {
+          if (answers.revenue === "100k-500k") return "growth";
+          if (answers.revenue === "500k-plus") return "enterprise";
+          return "starter";
+        })();
+        return <InterstitialScreen variant={revenueVariant} onContinue={advance} />;
+      }
 
       case "interstitial-2":
-        return <InterstitialScreen variant={2} onContinue={advance} />;
+        return <InterstitialScreen variant="pre-results" onContinue={advance} />;
 
       case "email-capture":
         return (

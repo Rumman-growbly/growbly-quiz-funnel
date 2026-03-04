@@ -1,22 +1,44 @@
 "use client";
 
+export type InterstitialVariant = "starter" | "growth" | "enterprise" | "pre-results";
+
 interface InterstitialScreenProps {
-  variant: 1 | 2;
+  variant: InterstitialVariant;
   onContinue: () => void;
 }
 
-const CONTENT = {
-  1: {
-    eyebrow: "You're not alone in this.",
-    heading: "Most growing businesses hit exactly this wall.",
-    body: "Manual work, disconnected tools, team bottlenecks — these aren't signs that something's broken. They're signs that your business has outgrown the systems it started with. The next few questions help us figure out exactly where to start.",
+const CONTENT: Record<
+  InterstitialVariant,
+  { tag: string; heading: string; body: string; button: string }
+> = {
+  starter: {
+    tag: "YOU ARE CLOSER THAN YOU THINK",
+    heading:
+      "Most businesses at your stage think they need to grow more before automating. They have it backwards.",
+    body: "The right automation at your stage does not just save time. It creates the foundation that makes everything else easier to scale. The next few questions help us figure out exactly where to start.",
+    button: "Let\u2019s keep going",
   },
-  2: {
-    eyebrow: "Almost there.",
-    heading: "We're building your recommendation now.",
-    body: "Two final questions — these help us scope the right level of solution for your business, so we can give you a specific recommendation rather than a generic one.",
+  growth: {
+    tag: "THIS IS THE PATTERN WE SEE MOST",
+    heading:
+      "The businesses we work with most look exactly like yours right now.",
+    body: "Strong revenue. A team that works hard. And a set of systems that were never designed to carry a business at this size. The next few questions help us pinpoint exactly which parts of your operation to fix first.",
+    button: "Let\u2019s keep going",
   },
-} as const;
+  enterprise: {
+    tag: "YOU HAVE BUILT SOMETHING REAL",
+    heading:
+      "At your scale, the problem is not effort. You have plenty of that. The problem is infrastructure.",
+    body: "Businesses operating at your level do not have a growth problem. They have a systems problem. The complexity that comes with scale creates operational drag that compounds every single month. The next few questions help us map exactly where it is costing you.",
+    button: "Let\u2019s keep going",
+  },
+  "pre-results": {
+    tag: "ALMOST THERE",
+    heading: "We\u2019re building your recommendation now.",
+    body: "Two final questions. These help us scope the right level of solution for your business, so we can give you a specific recommendation rather than a generic one.",
+    button: "Continue",
+  },
+};
 
 export default function InterstitialScreen({
   variant,
@@ -26,9 +48,9 @@ export default function InterstitialScreen({
 
   return (
     <div className="w-full flex flex-col items-start">
-      {/* Eyebrow */}
-      <p className="text-sm font-semibold text-[#92400e] uppercase tracking-widest mb-4">
-        {c.eyebrow}
+      {/* Tag */}
+      <p className="text-xs font-bold text-[#92400e] uppercase tracking-widest mb-4">
+        {c.tag}
       </p>
 
       {/* Heading */}
@@ -52,7 +74,7 @@ export default function InterstitialScreen({
           transition-all duration-200
         "
       >
-        Continue
+        {c.button}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"

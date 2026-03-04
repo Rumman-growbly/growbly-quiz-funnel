@@ -50,7 +50,7 @@ export default function EmailCaptureScreen({
       </h2>
       <p className="text-gray-500 text-base sm:text-lg leading-relaxed mb-8 max-w-md">
         Enter your email and we&rsquo;ll send your personalised AI automation
-        recommendation — including the exact package we&rsquo;d recommend and
+        recommendation, including the exact package we&rsquo;d recommend and
         why.
       </p>
 
