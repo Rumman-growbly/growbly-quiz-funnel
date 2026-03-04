@@ -24,8 +24,10 @@ export default function HeroSection() {
 
         {/* Headline */}
         <div className="mb-6">
-          <h1 className="text-4xl sm:text-5xl lg:text-[52px] font-bold text-gray-900 leading-tight tracking-tight text-balance">
-            Something in your operation is bleeding time and money every single week.
+          <h1 className="text-4xl sm:text-5xl lg:text-[52px] font-bold text-gray-900 leading-tight tracking-tight">
+            Something in your operation is<br />
+            <span style={{ color: "#EAB308" }}>bleeding</span> <span style={{ color: "#16A34A" }}>time and money</span><br />
+            every single week.
           </h1>
           <p className="mt-2 text-xl sm:text-2xl font-normal text-[#6B7280] leading-snug">
             Most owners never find it.

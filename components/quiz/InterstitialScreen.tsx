@@ -34,7 +34,7 @@ const CONTENT: Record<
   },
   "pre-results": {
     tag: "ALMOST THERE",
-    heading: "We\u2019re building your recommendation now.",
+    heading: "We\u2019re building your recommendation.",
     body: "Two final questions. These help us scope the right level of solution for your business, so we can give you a specific recommendation rather than a generic one.",
     button: "Continue",
   },
