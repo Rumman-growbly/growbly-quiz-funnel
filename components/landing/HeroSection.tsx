@@ -23,9 +23,14 @@ export default function HeroSection() {
         </div>
 
         {/* Headline */}
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight tracking-tight mb-6 text-balance">
-          Something in your operation is bleeding time and money every single week. Most owners never find it.
-        </h1>
+        <div className="mb-6">
+          <h1 className="text-4xl sm:text-5xl lg:text-[52px] font-bold text-gray-900 leading-tight tracking-tight text-balance">
+            Something in your operation is bleeding time and money every single week.
+          </h1>
+          <p className="mt-2 text-xl sm:text-2xl font-normal text-[#6B7280] leading-snug">
+            Most owners never find it.
+          </p>
+        </div>
 
         {/* Subheadline */}
         <p className="text-lg sm:text-xl text-gray-500 leading-relaxed mb-10 max-w-lg mx-auto">

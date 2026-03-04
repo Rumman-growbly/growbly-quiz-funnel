@@ -15,21 +15,21 @@ const CONTENT: Record<
     tag: "YOU ARE CLOSER THAN YOU THINK",
     heading:
       "Most businesses at your stage think they need to grow more before automating. They have it backwards.",
-    body: "The right automation at your stage does not just save time. It creates the foundation that makes everything else easier to scale. The next few questions help us figure out exactly where to start.",
+    body: "The right automation at your stage does not just save time. It builds the foundation everything else scales on.",
     button: "Let\u2019s keep going",
   },
   growth: {
     tag: "THIS IS THE PATTERN WE SEE MOST",
     heading:
       "The businesses we work with most look exactly like yours right now.",
-    body: "Strong revenue. A team that works hard. And a set of systems that were never designed to carry a business at this size. The next few questions help us pinpoint exactly which parts of your operation to fix first.",
+    body: "Strong revenue, hard-working team, and systems that were never built for this size. That is exactly what we fix.",
     button: "Let\u2019s keep going",
   },
   enterprise: {
     tag: "YOU HAVE BUILT SOMETHING REAL",
     heading:
       "At your scale, the problem is not effort. You have plenty of that. The problem is infrastructure.",
-    body: "Businesses operating at your level do not have a growth problem. They have a systems problem. The complexity that comes with scale creates operational drag that compounds every single month. The next few questions help us map exactly where it is costing you.",
+    body: "At your level, complexity compounds every month. The next few questions map exactly where it is costing you.",
     button: "Let\u2019s keep going",
   },
   "pre-results": {
