@@ -41,18 +41,30 @@ const tierContent: Record<string, { title: string; tagline: string; body: string
   },
 };
 
-const tierAccent: Record<string, string> = {
-  starter: "#059669",
-  growth: "#7c3aed",
-  enterprise: "#2563eb",
+interface TierAccent {
+  hex: string;
+  rgbaLight: string; // 0.10 opacity — badge bg
+  rgbaMid: string;   // 0.13 opacity — icon bg
+  rgbaBorder: string; // 0.27 opacity — borders
+}
+
+const tierAccent: Record<string, TierAccent> = {
+  starter:    { hex: "#059669", rgbaLight: "rgba(5,150,105,0.10)",   rgbaMid: "rgba(5,150,105,0.13)",   rgbaBorder: "rgba(5,150,105,0.27)"   },
+  growth:     { hex: "#7c3aed", rgbaLight: "rgba(124,58,237,0.10)",  rgbaMid: "rgba(124,58,237,0.13)",  rgbaBorder: "rgba(124,58,237,0.27)"  },
+  enterprise: { hex: "#2563eb", rgbaLight: "rgba(37,99,235,0.10)",   rgbaMid: "rgba(37,99,235,0.13)",   rgbaBorder: "rgba(37,99,235,0.27)"   },
 };
+
+// Bar inner width in px: 560px card - 80px padding - 40px score card padding - 8px bar padding = 432px
+const BAR_WIDTH_PX = 432;
 
 function buildLeadEmail(tier: string, email: string, scores: Record<string, number>): string {
   const content = tierContent[tier] ?? tierContent.growth;
-  const accent = tierAccent[tier] ?? "#7c3aed";
+  const accent = tierAccent[tier] ?? tierAccent.growth;
   const tierScore = scores[tier] ?? 0;
   const maxScore = 40;
   const scorePct = Math.min(Math.round((tierScore / maxScore) * 100), 100);
+  const filledPx = Math.round((scorePct / 100) * BAR_WIDTH_PX);
+  const emptyPx = BAR_WIDTH_PX - filledPx;
 
   const outcomesHtml = content.outcomes
     .map(
@@ -62,7 +74,9 @@ function buildLeadEmail(tier: string, email: string, scores: Record<string, numb
           <table cellpadding="0" cellspacing="0">
             <tr>
               <td style="width:28px;vertical-align:top;padding-top:1px;">
-                <div style="width:20px;height:20px;border-radius:50%;background:${accent}22;text-align:center;line-height:20px;font-size:11px;font-weight:700;color:${accent};">✓</div>
+                <table cellpadding="0" cellspacing="0" style="width:20px;height:20px;border-radius:50%;background:${accent.rgbaMid};">
+                  <tr><td style="text-align:center;font-size:11px;font-weight:700;color:${accent.hex};line-height:20px;">&#10003;</td></tr>
+                </table>
               </td>
               <td style="font-size:15px;color:#d1d5db;line-height:1.5;">${o}</td>
             </tr>
@@ -95,7 +109,7 @@ function buildLeadEmail(tier: string, email: string, scores: Record<string, numb
             <table width="100%" cellpadding="0" cellspacing="0">
               <tr>
                 <td style="background:linear-gradient(160deg,#1E0A3C 0%,#2e1065 50%,#1a0533 100%);padding:44px 40px 36px;text-align:center;">
-                  <p style="margin:0 0 16px;display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#a78bfa;background:#ffffff14;padding:6px 14px;border-radius:20px;border:1px solid #ffffff22;">AI Readiness Assessment</p>
+                  <p style="margin:0 0 16px;display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#a78bfa;background:rgba(255,255,255,0.08);padding:6px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.13);">AI Readiness Assessment</p>
                   <h1 style="margin:0 0 12px;font-size:30px;font-weight:800;color:#ffffff;line-height:1.25;letter-spacing:-0.02em;">Your results are in,<br>and they're specific.</h1>
                   <p style="margin:0;font-size:15px;color:#c4b5fd;line-height:1.6;">Based on your 8 answers, here is your personalised automation plan.</p>
                 </td>
@@ -116,19 +130,17 @@ function buildLeadEmail(tier: string, email: string, scores: Record<string, numb
                               <p style="margin:0;font-size:26px;font-weight:800;color:#ffffff;">${tierScore}<span style="font-size:14px;font-weight:400;color:#6b7280;"> / ${maxScore}</span></p>
                             </td>
                             <td style="text-align:right;vertical-align:middle;">
-                              <span style="display:inline-block;font-size:12px;font-weight:700;color:${accent};background:${accent}1a;padding:4px 12px;border-radius:20px;border:1px solid ${accent}44;">${tier.charAt(0).toUpperCase() + tier.slice(1)} fit</span>
+                              <table cellpadding="0" cellspacing="0" style="display:inline-table;background:${accent.rgbaLight};border-radius:20px;border:1px solid ${accent.rgbaBorder};">
+                                <tr><td style="padding:4px 12px;font-size:12px;font-weight:700;color:${accent.hex};white-space:nowrap;">${tier.charAt(0).toUpperCase() + tier.slice(1)} fit</td></tr>
+                              </table>
                             </td>
                           </tr>
                           <tr>
                             <td colspan="2" style="padding-top:14px;">
-                              <table width="100%" cellpadding="0" cellspacing="0" style="background:#1f1b35;border-radius:6px;overflow:hidden;">
-                                <tr><td style="height:8px;"></td></tr>
+                              <table width="${BAR_WIDTH_PX}" cellpadding="0" cellspacing="0" style="background:#1f1b35;border-radius:6px;">
                                 <tr>
-                                  <td style="padding:0 4px 4px;">
-                                    <table cellpadding="0" cellspacing="0" style="width:${scorePct}%;background:linear-gradient(90deg,${accent},${accent}cc);border-radius:4px;height:8px;">
-                                      <tr><td></td></tr>
-                                    </table>
-                                  </td>
+                                  <td width="${filledPx}" height="8" style="background:${accent.hex};border-radius:6px;font-size:0;line-height:0;">&nbsp;</td>
+                                  <td width="${emptyPx}" height="8" style="font-size:0;line-height:0;">&nbsp;</td>
                                 </tr>
                               </table>
                             </td>
@@ -145,10 +157,10 @@ function buildLeadEmail(tier: string, email: string, scores: Record<string, numb
             <table width="100%" cellpadding="0" cellspacing="0">
               <tr>
                 <td style="padding:20px 40px 0;">
-                  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0b1a;border-radius:12px;border-left:3px solid ${accent};">
+                  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0b1a;border-radius:12px;border-left:3px solid ${accent.hex};">
                     <tr>
                       <td style="padding:24px;">
-                        <p style="margin:0 0 8px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:${accent};">Your Recommendation</p>
+                        <p style="margin:0 0 8px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:${accent.hex};">Your Recommendation</p>
                         <h2 style="margin:0 0 8px;font-size:22px;font-weight:800;color:#ffffff;">${content.title}</h2>
                         <p style="margin:0;font-size:15px;color:#9ca3af;line-height:1.6;">${content.tagline}</p>
                       </td>
@@ -191,7 +203,7 @@ function buildLeadEmail(tier: string, email: string, scores: Record<string, numb
                 <td style="padding:32px 40px 40px;text-align:center;">
                   <p style="margin:0 0 6px;font-size:20px;font-weight:800;color:#ffffff;line-height:1.3;">See exactly what we'd build for you.</p>
                   <p style="margin:0 0 28px;font-size:14px;color:#9ca3af;line-height:1.6;">One free 30-minute call. No pitch — just a clear, specific plan<br>mapped to your operation.</p>
-                  <a href="${CALENDLY_URL}" style="display:inline-block;background:${accent};color:#ffffff;font-size:16px;font-weight:700;padding:16px 40px;border-radius:10px;text-decoration:none;letter-spacing:0.01em;">Book Your Free Strategy Call &rarr;</a>
+                  <a href="${CALENDLY_URL}" style="display:inline-block;background:${accent.hex};color:#ffffff;font-size:16px;font-weight:700;padding:16px 40px;border-radius:10px;text-decoration:none;letter-spacing:0.01em;">Book Your Free Strategy Call &rarr;</a>
                   <p style="margin:16px 0 0;font-size:12px;color:#4b5563;">Free &middot; No obligation &middot; 30 minutes</p>
                 </td>
               </tr>
