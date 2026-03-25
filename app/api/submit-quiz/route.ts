@@ -327,5 +327,28 @@ export async function POST(req: NextRequest) {
     }),
   ]).catch((err) => console.error("[submit-quiz] Resend failed:", err));
 
+  // 3. Fire n8n webhook (fire-and-forget)
+  const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL;
+  if (n8nWebhookUrl) {
+    fetch(n8nWebhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: lead.email,
+        challenge: answers.pain,
+        business_type: answers.role,
+        team_size: answers.scale,
+        revenue: answers.revenue,
+        timeline: answers.timeline,
+        ai_familiarity: answers.aiFamiliarity,
+        investment_readiness: answers.investment,
+        recommended_tier: recommendedTier,
+        starter_score: scores.starter,
+        growth_score: scores.growth,
+        enterprise_score: scores.enterprise,
+      }),
+    }).catch((err) => console.error("[submit-quiz] n8n webhook failed:", err));
+  }
+
   return NextResponse.json({ success: true, tier: recommendedTier }, { status: 200 });
 }
